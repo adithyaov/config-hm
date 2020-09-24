@@ -27,6 +27,8 @@ let
       tree
       openssh
       perl532Packages.NetOpenSSH
+      xcape
+      xorg.xmodmap
     ];
 
   };

@@ -118,8 +118,9 @@ fi
 
 # =========== REMAP: Capslock and Space ====================================
 
-# Map an unused modifier's keysym to the spacebar's keycode and make it a
-# control modifier. It needs to be an existing key so that emacs won't
+alias emacs-keys='
+# Map an unused modifier keysym to the spacebars keycode and make it a
+# control modifier. It needs to be an existing key so that emacs wont
 # spazz out when you press it. Hyper_L is a good candidate.
 spare_modifier="Hyper_L"
 xmodmap -e "keycode 65 = $spare_modifier"
@@ -135,7 +136,8 @@ xcape -e "$spare_modifier=space"
 
 # Remap Capslock to escape
 xmodmap -e "clear Lock"
-xmodmap -e "keycode 66 = Excape NoSymbol Escape"
+xmodmap -e "keycode 66 = Escape NoSymbol Escape"
 
 # Re - source nix profile
 if [ -e "$HOME/.nix-profile/etc/profile.d/nix.sh" ]; then source "$HOME/.nix-profile/etc/profile.d/nix.sh"; fi
+'

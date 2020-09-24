@@ -136,3 +136,6 @@ xcape -e "$spare_modifier=space"
 # Remap Capslock to escape
 xmodmap -e "clear Lock"
 xmodmap -e "keycode 66 = Excape NoSymbol Escape"
+
+# Re - source nix profile
+if [ -e "$HOME/.nix-profile/etc/profile.d/nix.sh" ]; then source "$HOME/.nix-profile/etc/profile.d/nix.sh"; fi

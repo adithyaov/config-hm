@@ -1,10 +1,13 @@
 { pkgs } :
 let
 
-  hindent-composewell = builtins.fetchGit {
-    url = "git@github.com:adithyaov/hindent.git";
-    ref = "composewell-style";
-  };
+  hindent-composewell =
+    let src = builtins.fetchGit {
+          url = "git@github.com:adithyaov/hindent.git";
+          ref = "composewell-style";
+        };
+    in
+      pkgs.haskellPackages.callPackage src {};
 
 in
 

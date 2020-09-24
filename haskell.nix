@@ -3,7 +3,7 @@ let
 
   hindent-composewell =
     let src = builtins.fetchGit {
-          url = "git@github.com:adithyaov/hindent.git";
+          url = "https://github.com/adithyaov/hindent.git";
           ref = "composewell-style";
         };
     in

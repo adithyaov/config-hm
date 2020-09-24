@@ -1,11 +1,9 @@
 { pkgs }:
 
 {
-  home.packages = [
-    (import ./emacsFonts.nix)
-  ];
   home.file.".emacs.d".recursive = true;
   home.file.".emacs.d".source = ./.emacs.d;
+
   programs.emacs.enable = true;
   programs.emacs.extraPackages = epkgs: with epkgs;
     [ ahk-mode

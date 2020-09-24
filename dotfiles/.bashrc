@@ -115,9 +115,3 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
-
-alias eme='
-export DISPLAY=:0.0
-export LIBGL_ALWAYS_INDIRECT=1
-setsid emacs
-'

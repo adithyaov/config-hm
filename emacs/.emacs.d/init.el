@@ -20,6 +20,9 @@
 ;; Load custom file
 (load "~/.emacs.d/custom.el")
 
+;; Translate ESC to C-c, We have no use for ESC
+(define-key key-translation-map (kbd "ESC") (kbd "C-c"))
+
 ;; Minimal UI
 (scroll-bar-mode -1)
 (tool-bar-mode -1)

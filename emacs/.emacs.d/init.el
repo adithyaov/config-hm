@@ -43,8 +43,9 @@
 ;; Ignore ding
 (setq ring-bell-function 'ignore)
 
-;; Set scratch default text to ""
-(setq initial-scratch-message "")
+;;disable splash screen and scratch message
+(setq inhibit-startup-message t)
+(setq initial-scratch-message nil)
 
 ;; Onsave hook, remove spaces
 (add-hook 'before-save-hook 'delete-trailing-whitespace)

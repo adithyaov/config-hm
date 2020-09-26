@@ -257,7 +257,7 @@ the beginning of the line"
      ("n"   next-line)
      ("P"   backward-paragraph)
      ("N"   forward-paragraph)
-     ("a"   crux-move-beginning-of-line)
+     ("a"   smarter-move-point)
      ("e"   move-end-of-line)
      ("q"   nil)
      ("v"   scroll-up-command)

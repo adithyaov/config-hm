@@ -141,7 +141,7 @@
 ;; Load theme
 (progn
   (require 'doom-themes)
-  (load-theme 'doom-city-lights t))
+  (load-theme 'doom-palenight t))
 
 ;; Look at markdown in a clean format
 (progn

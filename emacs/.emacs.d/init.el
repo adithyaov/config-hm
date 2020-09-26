@@ -5,7 +5,7 @@
   "Get a path relative to .emacs.d editable config"
   (concat path-init x))
 
-(setq path-prog "/mnt/c/Users/mota/Desktop/LinuxWorkStation/Prog")
+(setq path-prog "~/Desktop/Prog")
 
 (defun rel-prog (x)
   "Get a path relative to .emacs.d editable config"

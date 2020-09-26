@@ -18,5 +18,6 @@ in
     cabal-install
     ghcid
     hindent-composewell
+    hlint
   ];
 }

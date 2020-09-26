@@ -21,6 +21,7 @@ let
     # changes in each release.
     home.stateVersion = "20.09";
 
+    nixpkgs.config.allowUnfree = true;
     home.packages = with pkgs; [
       hello
       cacert
@@ -29,6 +30,7 @@ let
       perl532Packages.NetOpenSSH
       xcape
       xorg.xmodmap
+      discord
     ];
 
   };

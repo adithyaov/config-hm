@@ -31,6 +31,7 @@ let
       xcape
       xorg.xmodmap
       discord
+      firefox
       xterm
     ];
 

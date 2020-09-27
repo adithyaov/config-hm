@@ -97,6 +97,10 @@
 ;; Set column length to 80
 (setq-default fill-column 80)
 
+;; Configure ace-window
+(require 'ace-window)
+(global-set-key (kbd "M-o") 'ace-window)
+
 ; require nix-mode
 (require 'nix-mode)
 
@@ -539,3 +543,43 @@ you ran this command from."
     (interactive)
     (set-default-target)
     (ghcid-start (projectile-project-root)))
+
+
+
+
+;; EXWM config
+;; Don't currently enable
+(when nil
+  (require 'exwm)
+  (require 'exwm-config)
+
+  (setq exwm-workspace-number 2)
+
+  (setq exwm-input-simulation-keys
+	'(([?\C-b] . [left])
+          ([?\C-f] . [right])
+          ([?\C-p] . [up])
+          ([?\C-n] . [down])
+          ([?\M-f] . [C-right])
+          ([?\M-b] . [C-left])
+          ([?\C-a] . [end S-home])
+          ([?\C-e] . [end])
+          ([?\M-p] . [prior])
+          ([?\M-n] . [next])
+          ([?\C-d] . [delete])
+          ([?\C-k] . [S-end delete])
+	  ([?\C-y] . [C-v])
+	  ([?\M-w] . [C-c])
+	  ([?\C-s] . [C-f])
+	  ([?\C-g] . [escape])))
+
+  ;; "C-c o" is for switching workspaces.
+  (exwm-input-set-key (kbd "C-c o") #'exwm-workspace-switch)
+
+  (exwm-input-set-key  (kbd "M-o") 'ace-window)
+
+  (add-hook 'exwm-update-class-hook
+            (lambda ()
+              (exwm-workspace-rename-buffer exwm-class-name)))
+
+  (exwm-enable))

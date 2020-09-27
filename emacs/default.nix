@@ -36,5 +36,7 @@
       ivy-posframe
       doom-modeline
       nix-mode
+      exwm
+      ace-window
     ];
 }

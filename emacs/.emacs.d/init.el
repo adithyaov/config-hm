@@ -565,7 +565,7 @@ you ran this command from."
           ([?\C-n] . [down])
           ([?\M-f] . [C-right])
           ([?\M-b] . [C-left])
-          ([?\C-a] . [end S-home])
+          ([?\C-a] . [home])
           ([?\C-e] . [end])
           ([?\M-p] . [prior])
           ([?\M-n] . [next])

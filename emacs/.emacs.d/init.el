@@ -586,3 +586,6 @@ you ran this command from."
               (exwm-workspace-rename-buffer exwm-class-name)))
 
   (exwm-enable))
+
+;; set this again after configering exwm
+(setq ivy-posframe-parameters '((parent-frame nil)))

@@ -5,6 +5,9 @@
   "Get a path relative to .emacs.d editable config"
   (concat path-init x))
 
+;; Go where the mouse follows
+(setq mouse-autoselect-window t)
+
 (setq path-prog "~/Desktop/Prog")
 
 (defun rel-prog (x)
@@ -543,9 +546,6 @@ you ran this command from."
     (interactive)
     (set-default-target)
     (ghcid-start (projectile-project-root)))
-
-
-
 
 ;; EXWM config
 ;; Don't currently enable

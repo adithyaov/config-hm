@@ -8,8 +8,8 @@ let
 
     # Home Manager needs a bit of information about you and the
     # paths it should manage.
-    home.username = "adithyaov";
-    home.homeDirectory = "/home/adithyaov";
+    home.username = "adithya";
+    home.homeDirectory = "/home/adithya";
 
     # This value determines the Home Manager release that your
     # configuration is compatible with. This helps avoid breakage

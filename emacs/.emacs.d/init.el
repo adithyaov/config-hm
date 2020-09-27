@@ -570,7 +570,7 @@ you ran this command from."
           ([?\M-p] . [prior])
           ([?\M-n] . [next])
           ([?\C-d] . [delete])
-          ([?\C-k] . [S-end delete])
+          ([?\C-k] . [S-end C-x])
 	  ([?\C-y] . [C-v])
 	  ([?\M-w] . [C-c])
 	  ([?\C-s] . [C-f])

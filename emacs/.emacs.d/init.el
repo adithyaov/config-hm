@@ -5,8 +5,8 @@
   "Get a path relative to .emacs.d editable config"
   (concat path-init x))
 
-;; Go where the mouse follows
-(setq mouse-autoselect-window t)
+;; (Don't) Go where the mouse follows
+(setq mouse-autoselect-window nil)
 
 (setq path-prog "~/Desktop/Prog")
 
@@ -22,6 +22,9 @@
 
 ;; Load custom file
 (load "~/.emacs.d/custom.el")
+
+;; Set a nice font.
+(set-frame-font "DejaVu Sans Mono 13" nil t)
 
 ;; Translate ESC to C-c, We have no use for ESC
 (define-key key-translation-map (kbd "ESC") (kbd "C-c"))
@@ -101,6 +104,7 @@
 (setq-default fill-column 80)
 
 ;; Configure ace-window
+;; XXX Dosent work well with EXWM
 (require 'ace-window)
 (global-set-key (kbd "M-o") 'ace-window)
 
@@ -116,9 +120,11 @@
 
 (progn
   (require 'ivy-posframe)
+  (setq ivy-posframe-parameters '((parent-frame nil)))
   (setq ivy-posframe-display-functions-alist
 	'((ivy-complete . ivy-posframe-display-at-point)
-	  (counsel-esh-history . ivy-posframe-display-at-point)))
+	  (counsel-esh-history . ivy-posframe-display-at-point)
+	  (t . ivy-posframe-display-at-frame-center)))
   (setq ivy-posframe-parameters
 	'((left-fringe . 8)
 	  (right-fringe . 8)))
@@ -549,7 +555,7 @@ you ran this command from."
 
 ;; EXWM config
 ;; Don't currently enable
-(when nil
+(progn
   (require 'exwm)
   (require 'exwm-config)
 
@@ -576,7 +582,7 @@ you ran this command from."
   ;; "C-c o" is for switching workspaces.
   (exwm-input-set-key (kbd "C-c o") #'exwm-workspace-switch)
 
-  (exwm-input-set-key  (kbd "M-o") 'ace-window)
+  (exwm-input-set-key  (kbd "M-o") 'other-window)
 
   (add-hook 'exwm-update-class-hook
             (lambda ()

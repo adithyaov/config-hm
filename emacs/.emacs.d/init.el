@@ -23,9 +23,6 @@
 ;; Load custom file
 (load "~/.emacs.d/custom.el")
 
-;; Set a nice font.
-(set-frame-font "DejaVu Sans Mono 13" nil t)
-
 ;; Translate ESC to C-c, We have no use for ESC
 (define-key key-translation-map (kbd "ESC") (kbd "C-c"))
 

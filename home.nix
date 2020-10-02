@@ -33,6 +33,7 @@ let
       discord
       firefox
       xterm
+      gcc
     ];
 
   };

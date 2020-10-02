@@ -40,6 +40,9 @@
 ;; Display time
 (display-time-mode 1)
 
+;; Display battery
+(display-battery-mode 1)
+
 ;; Conservative scrolling
 (setq scroll-preserve-screen-position 'always)
 

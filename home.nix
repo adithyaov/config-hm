@@ -46,5 +46,6 @@ let
   emacs = import ./emacs { inherit pkgs; };
   haskell = import ./haskell.nix { inherit pkgs; };
   rust = import ./rust.nix { inherit pkgs; };
+  node = import ./node.nix { inherit pkgs; };
 in
-merge [base dotfiles emacs haskell git rust]
+merge [base dotfiles emacs haskell git rust node]

@@ -38,5 +38,6 @@
       nix-mode
       exwm
       ace-window
+      vue-mode
     ];
 }

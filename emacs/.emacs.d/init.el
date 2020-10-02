@@ -108,6 +108,9 @@
 (require 'ace-window)
 (global-set-key (kbd "M-o") 'ace-window)
 
+;; Configure vue-mode
+(require 'vue-mode)
+
 ; require nix-mode
 (require 'nix-mode)
 

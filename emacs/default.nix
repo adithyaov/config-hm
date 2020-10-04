@@ -39,5 +39,6 @@
       exwm
       ace-window
       vue-mode
+      elm-mode
     ];
 }

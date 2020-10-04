@@ -111,6 +111,9 @@
 ;; Configure vue-mode
 (require 'vue-mode)
 
+;; Configure elm-mode
+(require 'elm-mode)
+
 ; require nix-mode
 (require 'nix-mode)
 

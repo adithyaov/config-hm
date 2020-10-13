@@ -153,10 +153,11 @@
   (eshell-git-prompt-use-theme 'robbyrussell))
 
 ;; Show indentation block
-(progn
-  (require 'highlight-indent-guides)
-  (setq highlight-indent-guides-method 'character)
-  (add-hook 'prog-mode-hook 'highlight-indent-guides-mode))
+;; XXX Glitchy most of the time
+; (progn
+;   (require 'highlight-indent-guides)
+;   (setq highlight-indent-guides-method 'bitmap)
+;   (add-hook 'prog-mode-hook 'highlight-indent-guides-mode))
 
 ;; Load theme
 (progn

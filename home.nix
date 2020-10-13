@@ -34,7 +34,16 @@ let
       firefox
       xterm
       gcc
+      direnv
+      graphviz
     ];
+
+    xresources.properties = {
+      "XTerm*faceName" = "dejavu sans mono";
+      "XTerm*background" = "#242837";
+      "XTerm*foreground" = "white";
+      "xterm*faceSize" = "14";
+    };
 
   };
   git = {

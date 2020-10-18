@@ -19,5 +19,6 @@ in
     ghcid
     hindent-composewell
     hlint
+    blaze-from-html
   ];
 }

@@ -113,6 +113,10 @@
     (ansi-term "nu"))
 ;; Respect a few things in char mode
 (define-key term-raw-map (kbd "M-o") 'other-window)
+(define-key term-raw-map (kbd "C-y")
+  (lambda ()
+    (interactive)
+    (term-send-raw-string (current-kill 0))))
 
 ;; Configure ace-window
 ;; XXX Dosent work well with EXWM

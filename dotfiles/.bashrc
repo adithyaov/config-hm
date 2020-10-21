@@ -148,3 +148,6 @@ export DISPLAY=:1
 sleep 2
 emacs
 '
+
+# A quick alias into starship prompt
+alias star='eval "$(starship init bash)"'

@@ -36,8 +36,6 @@ let
       gcc
       direnv
       graphviz
-      nushell
-      tldr
     ];
 
     xresources.properties = {

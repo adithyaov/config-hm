@@ -104,24 +104,30 @@
 (setq-default fill-column 80)
 
 ;; Configure terminal for unicode and set nu
-(defadvice ansi-term (after advise-ansi-term-coding-system)
-    (set-buffer-process-coding-system 'utf-8-unix 'utf-8-unix))
-(ad-activate 'ansi-term)
 (defun nushell ()
     "Start a nu process in ansi-term"
     (interactive)
     (ansi-term "nu"))
-;; Respect a few things in char mode
-(define-key term-raw-map (kbd "M-o") 'other-window)
-(define-key term-raw-map (kbd "C-y")
-  (lambda ()
-    (interactive)
-    (term-send-raw-string (current-kill 0))))
+(add-hook
+ 'term-exec-hook
+ (lambda ()
+   (set-buffer-process-coding-system 'utf-8-unix 'utf-8-unix)
+   ;; Respect a few things in char mode
+   (define-key term-raw-map (kbd "M-o") 'other-window)
+   (define-key term-raw-map (kbd "C-y")
+     (lambda ()
+       (interactive)
+       (term-send-raw-string (current-kill 0))))))
+
+;; Configure proced-narrow
+(require 'proced-narrow)
+(global-set-key (kbd "M-o") 'ace-window)
+(define-key proced-mode-map (kbd "/") 'proced-narrow)
 
 ;; Configure ace-window
 ;; XXX Dosent work well with EXWM
 (require 'ace-window)
-(global-set-key (kbd "M-o") 'ace-window)
+;(global-set-key (kbd "M-o") 'ace-window)
 
 ;; Configure vue-mode
 (require 'vue-mode)

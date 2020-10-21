@@ -40,5 +40,6 @@
       ace-window
       vue-mode
       elm-mode
+      proced-narrow
     ];
 }

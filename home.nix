@@ -36,6 +36,8 @@ let
       gcc
       direnv
       graphviz
+      act
+      docker
     ];
 
     xresources.properties = {

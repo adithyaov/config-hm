@@ -20,5 +20,6 @@ in
     hindent-composewell
     hlint
     blaze-from-html
+    haskell-language-server
   ];
 }

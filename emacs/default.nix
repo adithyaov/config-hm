@@ -41,5 +41,6 @@
       vue-mode
       elm-mode
       proced-narrow
+      yaml-mode
     ];
 }

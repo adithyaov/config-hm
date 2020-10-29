@@ -7,5 +7,6 @@
     tealdeer
     sd
     starship
+    fd
   ];
 }

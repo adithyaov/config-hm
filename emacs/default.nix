@@ -42,5 +42,7 @@
       elm-mode
       proced-narrow
       yaml-mode
+      lsp-mode
+      lsp-haskell
     ];
 }

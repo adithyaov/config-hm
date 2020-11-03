@@ -59,5 +59,6 @@ let
   rust = import ./rust.nix { inherit pkgs; };
   node = import ./node.nix { inherit pkgs; };
   elm = import ./elm.nix { inherit pkgs; };
+  python = import ./python.nix { inherit pkgs; };
 in
-merge [base dotfiles emacs haskell git rust node elm]
+merge [base dotfiles emacs haskell git rust node elm python]

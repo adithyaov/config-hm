@@ -1,6 +1,10 @@
 ;; Configure paths
 (setq path-init "~/config/emacs/.emacs.d")
 
+;; Set UTF-8 for env
+(set-language-environment "UTF-8")
+(set-default-coding-systems 'utf-8)
+
 (defun rel-init (x)
   "Get a path relative to .emacs.d editable config"
   (concat path-init x))
@@ -151,6 +155,11 @@
 ;; Hooks so haskell and literate haskell major modes trigger LSP setup
 ;(add-hook 'haskell-mode-hook #'lsp)
 ;(add-hook 'haskell-literate-mode-hook #'lsp)
+
+;; Fira code font
+(set-frame-font "Fira Code" nil t)
+(require 'fira-code-mode)
+(global-fira-code-mode)
 
 (progn
   (require 'ivy-posframe)

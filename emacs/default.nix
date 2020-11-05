@@ -44,5 +44,6 @@
       yaml-mode
       lsp-mode
       lsp-haskell
+      fira-code-mode
     ];
 }

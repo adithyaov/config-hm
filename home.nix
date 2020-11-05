@@ -21,6 +21,9 @@ let
     # changes in each release.
     home.stateVersion = "20.09";
 
+    # Update font cache
+    fonts.fontconfig.enable = true;
+
     nixpkgs.config.allowUnfree = true;
     home.packages = with pkgs; [
       hello
@@ -38,6 +41,9 @@ let
       graphviz
       act
       docker
+      cachix
+      fira-code
+      fira-code-symbols
     ];
 
     xresources.properties = {

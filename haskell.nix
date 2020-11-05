@@ -9,6 +9,13 @@ let
     in
       pkgs.haskellPackages.callPackage src {};
 
+  ihp =
+    let src =
+          builtins.fetchTarball {
+            url = "https://ihp.digitallyinduced.com/ihp-new.tar.gz";
+          };
+    in src;
+
 in
 
 {
@@ -21,5 +28,6 @@ in
     hlint
     blaze-from-html
     haskell-language-server
+    ihp
   ];
 }

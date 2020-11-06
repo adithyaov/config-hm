@@ -125,8 +125,9 @@
 
 ;; Configure proced-narrow
 (require 'proced-narrow)
-(global-set-key (kbd "M-o") 'ace-window)
 (define-key proced-mode-map (kbd "/") 'proced-narrow)
+
+; (global-set-key (kbd "M-o") 'ace-window)
 
 ;; Configure ace-window
 ;; XXX Dosent work well with EXWM
@@ -526,8 +527,6 @@ Version 2018-04-02T14:38:04-07:00"
 (global-set-key (kbd "M-p") (lambda () (interactive) (smart-jump -20)))
 
 ;; Hindent
-
-
 (progn
   (require 'hindent)
   (add-hook 'haskell-mode-hook #'hindent-mode))

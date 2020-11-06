@@ -44,6 +44,7 @@ let
       cachix
       fira-code
       fira-code-symbols
+      nixfmt
     ];
 
     xresources.properties = {

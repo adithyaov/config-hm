@@ -143,7 +143,7 @@ if [ -e "$HOME/.nix-profile/etc/profile.d/nix.sh" ]; then source "$HOME/.nix-pro
 '
 
 alias xmacs='
-Xephyr :1 -ac -fullscreen -dpi 108 &
+Xephyr :1 -ac -fullscreen -dpi 116 &
 export DISPLAY=:1
 sleep 2
 emacs

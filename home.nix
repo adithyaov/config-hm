@@ -48,10 +48,36 @@ let
     ];
 
     xresources.properties = {
-      "XTerm*faceName" = "dejavu sans mono";
-      "XTerm*background" = "#242837";
-      "XTerm*foreground" = "white";
-      "xterm*faceSize" = "14";
+      "xterm*faceName" = "Fira Code";
+      "xterm*faceSize" = "10";
+      # special
+      "xterm*foreground" = "#d7dde7";
+      "xterm*background" = "#030405";
+      "xterm*cursorColor" = "#d7dde7";
+      # black
+      "xterm*color0" = "#06070b";
+      "xterm*color8" = "#fe798d";
+      # red
+      "xterm*color1" = "#11151b";
+      "xterm*color9" = "#e045e8";
+      # green
+      "xterm*color2" = "#212730";
+      "xterm*color10" = "#ed93f3";
+      # yellow
+      "xterm*color3" = "#37404d";
+      "xterm*color11" = "#aa8b28";
+      # blue
+      "xterm*color4" = "#525f71";
+      "xterm*color12" = "#b19651";
+      # magenta
+      "xterm*color5" = "#74859d";
+      "xterm*color13" = "#68adf2";
+      # cyan
+      "xterm*color6" = "#a2b1c8";
+      "xterm*color14" = "#f767fe";
+      # white
+      "xterm*color7" = "#dee3eb";
+      "xterm*color15" = "#8ab7eb";
     };
 
   };

@@ -45,5 +45,7 @@
       lsp-mode
       lsp-haskell
       fira-code-mode
+      nix-buffer
+      direnv
     ];
 }

@@ -5,6 +5,9 @@
 (set-language-environment "UTF-8")
 (set-default-coding-systems 'utf-8)
 
+;; Set back-up files path
+(setq backup-directory-alist `(("." . "~/.saves")))
+
 (defun rel-init (x)
   "Get a path relative to .emacs.d editable config"
   (concat path-init x))
@@ -133,6 +136,11 @@
 ;; XXX Dosent work well with EXWM
 (require 'ace-window)
 ;(global-set-key (kbd "M-o") 'ace-window)
+
+;; Confiure nix-dienv
+(progn
+ (require 'direnv)
+ (direnv-mode))
 
 ;; Configure vue-mode
 (require 'vue-mode)

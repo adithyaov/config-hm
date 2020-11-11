@@ -24,6 +24,10 @@ let
     # Update font cache
     fonts.fontconfig.enable = true;
 
+    # Enable direnv
+    programs.direnv.enable = true;
+    programs.direnv.enableNixDirenvIntegration = true;
+
     nixpkgs.config.allowUnfree = true;
     home.packages = with pkgs; [
       hello
@@ -37,7 +41,6 @@ let
       firefox
       xterm
       gcc
-      direnv
       graphviz
       act
       docker

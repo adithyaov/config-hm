@@ -1,37 +1,56 @@
+;; =============================================================================
+
 ;; Configure paths
-(setq path-init "~/config/emacs/.emacs.d")
+(setq path-init "~/config/emacs/.emacs.d/")
+(setq path-prog "~/Desktop/Prog/")
+(setq path-config "~/config/")
+(setq path-org "~/org/")
+
+(defun rel-init (x)
+  "Get a path relative to .emacs.d editable config"
+  (concat (file-name-as-directory path-init) x))
+
+(defun rel-prog (x)
+  "Get a path relative to .emacs.d editable config"
+  (concat (file-name-as-directory path-prog) x))
+
+(defun rel-org (x)
+  "Get a path relative to .emacs.d editable config"
+  (concat (file-name-as-directory path-org) x))
+
+;; =============================================================================
+
+;; Variable to determine if exwm should be enabled
+(setq enable-exwm t)
+
+;; =============================================================================
 
 ;; Set UTF-8 for env
 (set-language-environment "UTF-8")
 (set-default-coding-systems 'utf-8)
 
+;; =============================================================================
+
 ;; Set back-up files path
-(setq backup-directory-alist `(("." . "~/.saves")))
+(setq backup-directory-alist `(("." . "~/.saves/")))
 
-(defun rel-init (x)
-  "Get a path relative to .emacs.d editable config"
-  (concat path-init x))
+;; =============================================================================
 
-;; (Don't) Go where the mouse follows
+;; Don't Go where the mouse follows
 (setq mouse-autoselect-window nil)
 
-(setq path-prog "~/Desktop/Prog")
+;; =============================================================================
 
-(defun rel-prog (x)
-  "Get a path relative to .emacs.d editable config"
-  (concat path-prog x))
+;; Set & load custom.el
+(setq-default custom-file (rel-init "custom.el"))
+(load (rel-init "custom.el"))
 
-;; Set custom.el path
-(setq-default custom-file (rel-init "/custom.el"))
+;; =============================================================================
 
 ;; Load path for elisp files
-(add-to-list 'load-path "~/.emacs.d/elisp")
+(add-to-list 'load-path (rel-init "elisp"))
 
-;; Load custom file
-(load "~/.emacs.d/custom.el")
-
-;; Translate ESC to C-c, We have no use for ESC
-(define-key key-translation-map (kbd "ESC") (kbd "C-c"))
+;; =============================================================================
 
 ;; Minimal UI
 (scroll-bar-mode -1)
@@ -40,38 +59,54 @@
 (global-display-line-numbers-mode)
 (blink-cursor-mode 1)
 (global-hl-line-mode 1)
+(display-time-mode 1)                ;; Display time
+(display-battery-mode 1)             ;; Display battery
+
+;; =============================================================================
 
 ;; Prompt before kill
 (setq confirm-kill-emacs 'yes-or-no-p)
 
-;; Display time
-(display-time-mode 1)
-
-;; Display battery
-(display-battery-mode 1)
+;; =============================================================================
 
 ;; Conservative scrolling
 (setq scroll-preserve-screen-position 'always)
 
+;; =============================================================================
+
 ;; Ignore ding
 (setq ring-bell-function 'ignore)
+
+;; =============================================================================
 
 ;;disable splash screen and scratch message
 (setq inhibit-startup-message t)
 (setq initial-scratch-message nil)
 
+;; =============================================================================
+
+;; Auth keys sources
+(setq auth-sources '("~/.authinfo"))
+
+;; =============================================================================
+
+;; Set column length to 80
+(setq-default fill-column 80)
+
+;; =============================================================================
+
 ;; Onsave hook, remove spaces
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
-;; Disable C-v. I tend to press it a lot.
-(global-unset-key (kbd "C-v"))
-(global-set-key (kbd "C-v") 'scroll-up)
+;; =============================================================================
 
 ;; scroll one line at a time (less "jumpy" than defaults)
 (setq mouse-wheel-scroll-amount '(1 ((shift) . 1))) ;; one line at a time
 (setq mouse-wheel-progressive-speed nil) ;; don't accelerate scrolling
 (setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
 (setq scroll-step 1) ;; keyboard scroll one line at a time
+
+;; =============================================================================
 
 ;; Key bindings
 (global-set-key (kbd "M-o") 'other-window)
@@ -81,34 +116,39 @@
 (global-set-key (kbd "M-p") 'backward-paragraph)
 (global-set-key (kbd "C-s") 'isearch-forward)
 (global-set-key (kbd "C-r") 'isearch-backward)
+(global-set-key (kbd "C-x C-b") 'buffer-list-switch)
 
-; Use Alt+Arrow to jump to different windows
+;; Translate ESC to C-c, We have no use for ESC
+(define-key key-translation-map (kbd "ESC") (kbd "C-c"))
+
+;; =============================================================================
+
+;; Use Alt+Arrow to jump to different windows
+;; This does not work well with exwm
 (windmove-default-keybindings 'meta)
 
-; Default white space to match anything
+;; =============================================================================
+
+;; Default white space to match anything
 (setq search-whitespace-regexp ".*?")
+
+;; Use isearch-del-char instead of isearch-delete-char
 (define-key isearch-mode-map [remap isearch-delete-char] 'isearch-del-char)
 
-; Hilight matching parenthesis
+;; =============================================================================
+
+;; Hilight matching parenthesis
 (progn
   (setq show-paren-style 'parenthesis)
   (show-paren-mode 1))
 
+;; =============================================================================
+
 ;; Goto program dir when you type "prog"
-(defun goto-prog-dir ()
-  "Change directory to the Desktop/LinuxWorkStation/Prog"
-  (interactive)
-  (cd path-prog))
-(defalias 'prog 'goto-prog-dir)
+;; Mostly used in eshell
+(defalias 'prog (lambda () (cd path-prog)))
 
-;; Set the HOME constant
-(defconst HOME (getenv "HOME"))
-
-;; Auth keys
-(setq auth-sources '("~/.authinfo"))
-
-;; Set column length to 80
-(setq-default fill-column 80)
+;; =============================================================================
 
 ;; Configure terminal for unicode and set nu
 (defun nushell ()
@@ -126,90 +166,163 @@
        (interactive)
        (term-send-raw-string (current-kill 0))))))
 
+;; =============================================================================
+
 ;; Configure proced-narrow
 (require 'proced-narrow)
 (define-key proced-mode-map (kbd "/") 'proced-narrow)
 
-; (global-set-key (kbd "M-o") 'ace-window)
+;; =============================================================================
 
 ;; Configure ace-window
-;; XXX Dosent work well with EXWM
-(require 'ace-window)
-;(global-set-key (kbd "M-o") 'ace-window)
+;; Does not work well with exwm
+; (require 'ace-window)
+; (global-set-key (kbd "M-o") 'ace-window)
 
-;; Confiure nix-dienv
+;; =============================================================================
+
+;; Configure nix-dienv
 (progn
  (require 'direnv)
  (direnv-mode))
 
+;; =============================================================================
+
 ;; Configure vue-mode
 (require 'vue-mode)
+
+;; =============================================================================
 
 ;; Configure elm-mode
 (require 'elm-mode)
 
-; require nix-mode
+;; =============================================================================
+
+;; Configure nix-mode
 (require 'nix-mode)
 
+;; =============================================================================
+
+;; Configure doom-modeline
 (progn
   (require 'doom-modeline)
   (doom-modeline-init)
   (doom-modeline-mode 1))
 
+;; =============================================================================
+
+;; Configure forge
 (require 'forge)
 
+;; =============================================================================
+
 ;; Configure haskell language server
-(require 'lsp)
-(require 'lsp-haskell)
+; (require 'lsp)
+; (require 'lsp-haskell)
 ;; Hooks so haskell and literate haskell major modes trigger LSP setup
-;(add-hook 'haskell-mode-hook #'lsp)
-;(add-hook 'haskell-literate-mode-hook #'lsp)
+; (setq lsp-haskell-process-path-hie "haskell-language-server-wrapper")
+; (add-hook 'haskell-mode-hook #'lsp)
+; (add-hook 'haskell-literate-mode-hook #'lsp)
+
+;; =============================================================================
 
 ;; Fira code font
-(set-frame-font "Fira Code" nil t)
-(require 'fira-code-mode)
-(global-fira-code-mode)
+(progn
+ (set-frame-font "Fira Code" nil t)
+ (require 'fira-code-mode)
+ (global-fira-code-mode))
 
+;; =============================================================================
+
+;; Configure ivy-posframe
 (progn
   (require 'ivy-posframe)
-  (setq ivy-posframe-parameters '((parent-frame nil)))
   (setq ivy-posframe-display-functions-alist
 	'((ivy-complete . ivy-posframe-display-at-point)
 	  (counsel-esh-history . ivy-posframe-display-at-point)
 	  (t . ivy-posframe-display-at-frame-center)))
   (setq ivy-posframe-parameters
 	'((left-fringe . 8)
-	  (right-fringe . 8)))
+	  (right-fringe . 8)
+	  (parent-frame nil)))
   (ivy-posframe-mode 1))
 
+;; =============================================================================
+
+;; Configure ox-reveal
 (require 'ox-reveal)
 
+;; =============================================================================
+
+;; Configure org
 (progn
   (require 'org)
   (define-key org-mode-map (kbd "<C-return>") 'er/expand-region))
+
+;; Org mode work flow - Kanban style
+(setq org-todo-keywords
+      '((sequence "TODO" "DOING" "BLOCKED" "REVIEW" "|" "DONE" "ARCHIVED")))
+
+;; Setting Colours (faces) for todo states to give clearer view of work
+(setq org-todo-keyword-faces
+      '(("TODO" . org-warning)
+	("DOING" . "yellow")
+	("BLOCKED" . "red")
+	("REVIEW" . "orange")
+	("DONE" . "green")
+	("ARCHIVED" .  "blue")))
+
+(setq tasks-file (rel-org "tasks.org"))
+
+(setq org-capture-templates
+      '(("t" "Todo" entry
+	 (file+headline tasks-file "Tasks")
+	 "* TODO %?\n %i\n %a")
+	("j" "Journal" entry
+	 (file+olp+datetree "~/org/journal.org")
+	 "* %?\nEntered on %U\n  %i\n  %a")))
+
+(global-set-key (kbd "C-c c") 'org-capture)
+
+(defun tasks ()
+  "Open the init file."
+  (interactive)
+  (find-file tasks-file))
+
+;; =============================================================================
 
 ;; Hilight text that extends beyond a certain column
 (progn
   (require 'column-enforce-mode)
   (global-column-enforce-mode t))
 
+;; =============================================================================
+
 ;; Git prompt in eshell
 (progn
   (require 'eshell-git-prompt)
   (eshell-git-prompt-use-theme 'robbyrussell))
 
+;; =============================================================================
+
 ;; Show indentation block
-;; XXX Glitchy most of the time
+;; Glitchy most of the time
 ; (progn
 ;   (require 'highlight-indent-guides)
 ;   (setq highlight-indent-guides-method 'bitmap)
 ;   (add-hook 'prog-mode-hook 'highlight-indent-guides-mode))
 
-;; Load theme
+;; =============================================================================
+
+;; Configure theme
+;; This should work in synergy with custom-set-variables
 (progn
   (require 'doom-themes)
   (load-theme 'doom-palenight t))
 
+;; =============================================================================
+
+;; Configure impatient-mode
 ;; Look at markdown in a clean format
 (progn
   (require 'impatient-mode)
@@ -222,6 +335,9 @@
 		      (buffer-substring-no-properties (point-min) (point-max))))
      (current-buffer))))
 
+;; =============================================================================
+
+;; Configure expand-region
 (progn
   (require 'expand-region)
   (pending-delete-mode t)
@@ -229,22 +345,30 @@
   (global-set-key (kbd "<C-return>") 'er/expand-region)
   (global-set-key (kbd "C--") 'er/contract-region))
 
-(progn
-  (require 'ivy)
-  (require 'counsel)
-  (ivy-mode 1)
-  (setq ivy-use-virtual-buffers t)
-  (setq ivy-count-format "(%d/%d) ")
-  (global-set-key (kbd "C-x C-f") 'counsel-find-file)
-  (global-set-key (kbd "C-c g") 'counsel-git)
-  (add-hook
-   'eshell-mode-hook
-   (lambda () (define-key eshell-mode-map (kbd "M-r") 'counsel-esh-history))))
+;; =============================================================================
 
+;; Configure ivy-counsel-swiper
+(require 'ivy)
+(require 'counsel)
+(ivy-mode 1)
+(setq ivy-use-virtual-buffers t)
+(setq ivy-count-format "(%d/%d) ")
+(global-set-key (kbd "C-x C-f") 'counsel-find-file)
+(global-set-key (kbd "C-c g") 'counsel-git)
+(add-hook
+ 'eshell-mode-hook
+ (lambda () (define-key eshell-mode-map (kbd "M-r") 'counsel-esh-history)))
+
+;; =============================================================================
+
+;; Configure magit
 (progn
   (require 'magit)
   (global-set-key (kbd "C-x g") 'magit-status))
 
+;; =============================================================================
+
+;; Configure haskell-mode
 (progn
   (require 'haskell-mode)
   (setq haskell-tags-on-save nil)
@@ -252,24 +376,31 @@
   (add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
   (setq haskell-compile-cabal-build-command "cabal v2-build"))
 
-;; =================================================================
+;; =============================================================================
 
+;; Configure projectile & counsel-projectile
+;; Make sure counsel and projectile are present
 (progn
   (require 'projectile)
-  (require 'ivy)
   (require 'counsel)
   (require 'counsel-projectile)
+  (setq projectile-completion-system 'ivy)
+  (setq projectile-project-search-path `(,path-prog))
   (projectile-mode +1)
   (counsel-projectile-mode 1)
-  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-  (setq projectile-completion-system 'ivy)
-  (setq projectile-project-search-path '(path-prog)))
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
 
+;; =============================================================================
+
+;; Configure multiple-cursors
 (progn
   (require 'multiple-cursors)
   (global-set-key (kbd "C->") 'mc/mark-next-like-this)
   (global-set-key (kbd "C-<") 'mc/mark-previous-like-this))
 
+;; =============================================================================
+
+;; Configure avy
 (progn
   (require 'avy)
   (setq avy-keys '(?a ?s ?d ?f ?q ?w ?e ?r ?n ?m ?j ?k ?l ?o ?p))
@@ -279,37 +410,9 @@
   (setq avy-all-windows nil)
   (global-set-key (kbd "M-RET") 'avy-goto-word-0))
 
-(defun open-my-init-file ()
-  "Open the init file."
-  (interactive)
-  (find-file (rel-init "/init.el")))
+;; =============================================================================
 
-;; Use C-a to move to beginning of line and first indentation
-(defun smarter-move-point ()
-    "Move point to the first non-whitespace character on this line.
-If point is already there, move to the beginning of the line.
-Effectively toggle between the first non-whitespace character and
-the beginning of the line"
-    (interactive)
-
-    (let ((orig-point (point)))
-      (back-to-indentation)
-      (if (= orig-point (point))
-	  (move-beginning-of-line 1))))
-
-; Bind C-a to smarter-move-point
-(global-set-key (kbd "C-a") 'smarter-move-point)
-
-;; Open buffer list/switch
-(defun buffer-list-switch ()
-  "Switch to buffer list and activate the window"
-  (interactive)
-  (list-buffers)
-  (select-window (get-buffer-window "*Buffer List*" 0)))
-
-; Bind C-x C-b to buffer-list-switch
-(global-set-key (kbd "C-x C-b") 'buffer-list-switch)
-
+;; Configure hydra
 (progn
   (require 'hydra)
   (global-set-key
@@ -331,17 +434,61 @@ the beginning of the line"
      ("V"   scroll-down-command)
      ("m"   avy-goto-word-0 :color blue))))
 
+;; =============================================================================
 
-;; ===================================================================
+;; Configure highlight-function-calls
+;; Highlight emacs function calls
+(progn
+  (require 'highlight-function-calls)
+  (add-hook 'emacs-lisp-mode-hook 'highlight-function-calls-mode))
+
+;; =============================================================================
+
+;; Handy function to open my init file
+(defun open-init-file ()
+  "Open the init file."
+  (interactive)
+  (find-file (rel-init "init.el")))
+
+;; =============================================================================
+
+;; Use C-a to move to beginning of line and first indentation
+(defun smarter-move-point ()
+    "Move point to the first non-whitespace character on this line.
+If point is already there, move to the beginning of the line.
+Effectively toggle between the first non-whitespace character and
+the beginning of the line"
+    (interactive)
+
+    (let ((orig-point (point)))
+      (back-to-indentation)
+      (if (= orig-point (point))
+	  (move-beginning-of-line 1))))
+(global-set-key (kbd "C-a") 'smarter-move-point)
+
+;; =============================================================================
+
+;; Open buffer list/switch
+(defun buffer-list-switch ()
+  "Switch to buffer list and activate the window"
+  (interactive)
+  (list-buffers)
+  (select-window (get-buffer-window "*Buffer List*" 0)))
+
+;; =============================================================================
+
 ;; Haskell auto show core script
-
 (defun produce-core (file-path &optional ghc-path args)
   (let* ((check-nil (lambda (x y) (if x x y)))
 	 (gp (funcall check-nil ghc-path "ghc"))
 	 (aa (funcall check-nil args ""))
 	 (cmd (concat gp " " file-path " -ddump-simpl -ddump-to-file " aa))
 	 (so (shell-command-to-string cmd))
-	 (res (with-temp-buffer (insert-file-contents (concat (substring file-path 0 -2) "dump-simpl") nil) (buffer-string)))
+	 (res
+	  (with-temp-buffer
+	    (insert-file-contents
+	     (concat (substring file-path 0 -2) "dump-simpl") nil)
+	    (buffer-string)))
 	 (cb (current-buffer)))
     (progn (with-help-window "*core*" (princ res))
 	   (switch-to-buffer "*core*")
@@ -352,7 +499,8 @@ the beginning of the line"
   (interactive)
   (produce-core (buffer-file-name) "ghc" "-dsuppress-all -O2"))
 
-;; ===================================================================
+;; =============================================================================
+
 ;; cabal check open-repl/close
 (defvar cabalcc-target)
 
@@ -377,12 +525,7 @@ the beginning of the line"
 
 (define-key haskell-mode-map (kbd "C-c C-c") 'cabalcc-target)
 
-
-;; Highlight emacs function calls
-(progn
-  (require 'highlight-function-calls)
-  (add-hook 'emacs-lisp-mode-hook 'highlight-function-calls-mode))
-
+;; =============================================================================
 
 ;; Cool ivy completion, Copied from StackOverflow and modified accordingly
 (progn
@@ -407,7 +550,8 @@ the beginning of the line"
 
 (global-set-key (kbd "M-/") 'ivy-complete)
 
-;; ===================================================================
+;; =============================================================================
+
 ;; Custom function to delete blank lines & spaces, Thanks ergoemacs!
 (defun xah-delete-blank-lines ()
     "Delete all newline around cursor.
@@ -482,37 +626,7 @@ Version 2018-04-02T14:38:04-07:00"
 
 (global-set-key (kbd "M-d") 'xah-shrink-whitespaces)
 
-;; Org mode work flow - Kanban style
-
-(setq org-todo-keywords
-      '((sequence "TODO" "DOING" "BLOCKED" "REVIEW" "|" "DONE" "ARCHIVED")))
-
-;; Setting Colours (faces) for todo states to give clearer view of work
-(setq org-todo-keyword-faces
-      '(("TODO" . org-warning)
-	("DOING" . "yellow")
-	("BLOCKED" . "red")
-	("REVIEW" . "orange")
-	("DONE" . "green")
-	("ARCHIVED" .  "blue")))
-
-(setq tasks-file "~/org/tasks.org")
-
-(setq org-capture-templates
-      '(("t" "Todo" entry
-	 (file+headline tasks-file "Tasks")
-	 "* TODO %?\n %i\n %a")
-	("j" "Journal" entry
-	 (file+olp+datetree "~/org/journal.org")
-	 "* %?\nEntered on %U\n  %i\n  %a")))
-
-(global-set-key (kbd "C-c c") 'org-capture)
-
-(defun tasks ()
-  "Open the init file."
-  (interactive)
-  (find-file tasks-file))
-
+;; =============================================================================
 
 ;; Scroll by min(Paragraph, Half screen)
 
@@ -534,12 +648,13 @@ Version 2018-04-02T14:38:04-07:00"
 (global-set-key (kbd "M-n") (lambda () (interactive) (smart-jump 20)))
 (global-set-key (kbd "M-p") (lambda () (interactive) (smart-jump -20)))
 
-;; Hindent
+;; =============================================================================
+
+;; Configure hindent
 (progn
   (require 'hindent)
   (add-hook 'haskell-mode-hook #'hindent-mode))
 
-;; =================================================================
 ;; Try to work with both, hindent and CPP
 
 (progn
@@ -584,7 +699,9 @@ Version 2018-04-02T14:38:04-07:00"
   (define-key hindent-mode-map [remap fill-paragraph]
     #'hindent-reformat-decl-or-fill-cpp))
 
-;; GHCID
+;; =============================================================================
+
+;; Configure ghcid
 
 (require 'projectile)
 (require 'ghcid)
@@ -604,8 +721,9 @@ you ran this command from."
     (set-default-target)
     (ghcid-start (projectile-project-root)))
 
-;; EXWM config
-;; Don't currently enable
+;; =============================================================================
+
+;; Configure exwm
 (progn
   (require 'exwm)
   (require 'exwm-config)
@@ -639,7 +757,7 @@ you ran this command from."
             (lambda ()
               (exwm-workspace-rename-buffer exwm-class-name)))
 
-  (exwm-enable))
+  (if enable-exwm
+      (exwm-enable)))
 
-;; set this again after configering exwm
-(setq ivy-posframe-parameters '((parent-frame nil)))
+;; =============================================================================

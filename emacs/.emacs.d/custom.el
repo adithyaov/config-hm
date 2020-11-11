@@ -4,7 +4,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(highlight-function-calls-face ((t (:weight bold))))
- '(ivy-posframe ((t (:background "#181E24"))))
+ '(ivy-posframe ((t (:background "#232635"))))
  '(mode-line-inactive ((t (:background "#232635" :foreground "#676E95" :box nil)))))
 (custom-set-variables
  ;; custom-set-variables was added by Custom.

@@ -47,5 +47,6 @@
       fira-code-mode
       nix-buffer
       direnv
+      org-static-blog
     ];
 }

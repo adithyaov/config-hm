@@ -203,6 +203,47 @@
 
 ;; =============================================================================
 
+;; Blog settings
+(require 'org-static-blog)
+(setq org-static-blog-publish-title "Adithya Obilisetty")
+(setq org-static-blog-publish-url "./")
+(setq org-static-blog-publish-directory (rel-prog "blog/"))
+(setq org-static-blog-posts-directory (rel-prog "blog/posts/"))
+(setq org-static-blog-drafts-directory (rel-prog "blog/drafts/"))
+(setq org-static-blog-enable-tags nil)
+(setq org-export-with-toc t)
+(setq org-export-with-section-numbers t)
+(setq org-static-blog-use-preview t)
+
+(setq org-static-blog-page-header "
+<link rel=\"stylesheet\"
+      type=\"text/css\"
+      href=\"https://gongzhitaao.org/orgcss/org.css\"/>
+")
+
+(setq org-static-blog-page-preamble "
+<div style=\"display: flex; justify-content: space-between; width: 100%\">
+  <div>٩(^‿^)۶</div>
+  <div><a href=\"./index.html\">Home</a></div>
+  <div><a href=\"./about.html\">About</a></div>
+  <div><a href=\"./archive.html\">Archive</a></div>
+  <div><a href=\"./rss.xml\">RSS</a></div>
+</div>
+")
+
+(setq org-static-blog-page-postamble "
+<small>
+Site built by
+<a href=\"https://github.com/bastibe/org-static-blog\">org-static-blog</a>
+& <a href=\"https://github.com/gongzhitaao/orgcss\">orgcss</a>.
+The source code is
+<a href=\"https://github.com/adithyaov/adithyaov.github.io\">
+available on Github</a>.
+</small>
+")
+
+;; =============================================================================
+
 ;; Configure doom-modeline
 (progn
   (require 'doom-modeline)

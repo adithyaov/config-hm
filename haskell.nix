@@ -29,5 +29,6 @@ in
     blaze-from-html
     haskell-language-server
     ihp
+    hasktags
   ];
 }

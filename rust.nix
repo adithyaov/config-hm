@@ -6,7 +6,6 @@
     nushell
     tealdeer
     sd
-    starship
     fd
   ];
 }

@@ -203,6 +203,26 @@
 
 ;; =============================================================================
 
+;; Configure helm
+(require 'helm)
+(setq helm-split-window-in-side-p t)
+(global-set-key (kbd "M-x") 'helm-M-x)
+(global-set-key (kbd "C-x C-f") 'helm-find-files)
+(global-set-key (kbd "M-/") 'helm-dabbrev)
+(global-set-key (kbd "C-x b") 'helm-mini)
+(global-set-key (kbd "C-c h") 'helm-command-prefix)
+(global-set-key (kbd "C-c g") 'helm-google-suggest)
+(global-unset-key (kbd "C-x c"))
+(helm-mode 1)
+
+(require 'helm-eshell)
+(add-hook 'eshell-mode-hook
+          #'(lambda ()
+              (define-key eshell-mode-map (kbd "M-/")  'helm-eshell-history)))
+
+
+;; =============================================================================
+
 ;; Blog settings
 (require 'org-static-blog)
 (setq org-static-blog-publish-title "Adithya Obilisetty")
@@ -272,21 +292,6 @@ available on Github</a>.
  (set-frame-font "Fira Code" nil t)
  (require 'fira-code-mode)
  (global-fira-code-mode))
-
-;; =============================================================================
-
-;; Configure ivy-posframe
-(progn
-  (require 'ivy-posframe)
-  (setq ivy-posframe-display-functions-alist
-	'((ivy-complete . ivy-posframe-display-at-point)
-	  (counsel-esh-history . ivy-posframe-display-at-point)
-	  (t . ivy-posframe-display-at-frame-center)))
-  (setq ivy-posframe-parameters
-	'((left-fringe . 8)
-	  (right-fringe . 8)
-	  (parent-frame nil)))
-  (ivy-posframe-mode 1))
 
 ;; =============================================================================
 
@@ -388,22 +393,6 @@ available on Github</a>.
 
 ;; =============================================================================
 
-;; Configure ivy-counsel-swiper
-(require 'ivy)
-(require 'counsel)
-(ivy-mode 1)
-(setq ivy-use-virtual-buffers t)
-(setq ivy-count-format "(%d/%d) ")
-(define-key ivy-minibuffer-map (kbd "RET") 'ivy-alt-done)
-(define-key ivy-minibuffer-map (kbd "C-j") 'ivy-done)
-(global-set-key (kbd "C-x C-f") 'counsel-find-file)
-(global-set-key (kbd "C-c g") 'counsel-git)
-(add-hook
- 'eshell-mode-hook
- (lambda () (define-key eshell-mode-map (kbd "M-r") 'counsel-esh-history)))
-
-;; =============================================================================
-
 ;; Configure magit
 (progn
   (require 'magit)
@@ -421,17 +410,20 @@ available on Github</a>.
 
 ;; =============================================================================
 
-;; Configure projectile & counsel-projectile
-;; Make sure counsel and projectile are present
+;; Configure projectile
 (progn
   (require 'projectile)
-  (require 'counsel)
-  (require 'counsel-projectile)
-  (setq projectile-completion-system 'ivy)
+  (setq projectile-completion-system 'helm)
   (setq projectile-project-search-path `(,path-prog))
   (projectile-mode +1)
-  (counsel-projectile-mode 1)
   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
+
+;; =============================================================================
+
+;; Configure helm-projectile
+(progn
+  (require 'helm-projectile)
+  (helm-projectile-on))
 
 ;; =============================================================================
 
@@ -567,31 +559,6 @@ the beginning of the line"
   (cabalcc cabalcc-target))
 
 (define-key haskell-mode-map (kbd "C-c C-c") 'cabalcc-target)
-
-;; =============================================================================
-
-;; Cool ivy completion, Copied from StackOverflow and modified accordingly
-(progn
-
-  (require 's)
-  (require 'ivy)
-
-  ;; Is there a better way to get the expansions?
-  (defun ivy-complete ()
-    (interactive)
-    (dabbrev--reset-global-variables)
-    (let* ((sym (thing-at-point 'symbol :no-properties))
-	   (candidates (dabbrev--find-all-expansions sym t))
-	   (bounds (bounds-of-thing-at-point 'symbol)))
-      (when (not (null candidates))
-	(let* ((found-match (ivy-read sym candidates
-				      :preselect sym
-				      :sort t
-				      :initial-input nil)))
-	  (progn (delete-region (car bounds) (cdr bounds))
-		 (insert found-match)))))))
-
-(global-set-key (kbd "M-/") 'ivy-complete)
 
 ;; =============================================================================
 

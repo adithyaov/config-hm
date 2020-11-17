@@ -48,5 +48,7 @@
       nix-buffer
       direnv
       org-static-blog
+      helm
+      helm-projectile
     ];
 }

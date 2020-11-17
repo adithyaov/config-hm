@@ -2,6 +2,11 @@
 let
   lib = import <nixpkgs/lib>;
   merge = import ./merge.nix { inherit lib; };
+
+  emacsOverlay = import (builtins.fetchTarball {
+    url = https://github.com/nix-community/emacs-overlay/archive/master.tar.gz;
+  });
+
   base = {
     # Let Home Manager install and manage itself.
     programs.home-manager.enable = true;
@@ -29,6 +34,7 @@ let
     programs.direnv.enableNixDirenvIntegration = true;
 
     nixpkgs.config.allowUnfree = true;
+    nixpkgs.overlays = [ emacsOverlay ];
     home.packages = with pkgs; [
       hello
       cacert

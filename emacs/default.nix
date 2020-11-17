@@ -44,6 +44,7 @@
       yaml-mode
       lsp-mode
       lsp-haskell
+      lsp-ui
       fira-code-mode
       nix-buffer
       direnv

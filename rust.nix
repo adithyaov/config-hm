@@ -7,5 +7,6 @@
     tealdeer
     sd
     fd
+    ripgrep
   ];
 }

@@ -51,5 +51,6 @@
       org-static-blog
       helm
       helm-projectile
+      use-package
     ];
 }

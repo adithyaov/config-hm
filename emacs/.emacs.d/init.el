@@ -21,7 +21,7 @@
 ;; =============================================================================
 
 ;; Variable to determine if exwm should be enabled
-(setq enable-exwm t)
+(setq enable-exwm-p t)
 
 ;; =============================================================================
 
@@ -156,80 +156,87 @@
   (ansi-term "nu"))
 
 ;; Configure terminal for unicode and set nu
-(use-package term
+(leaf term
   :init
   (defun setup-term ()
     (set-buffer-process-coding-system 'utf-8-unix 'utf-8-unix))
   (defun paste-in-term ()
     (interactive)
     (term-send-raw-string (current-kill 0)))
-  :bind (:map term-raw-map
-	      ("M-o" . other-window)
-	      ("C-y" . paste-in-term))
-  :hook ((term-exec . setup-term)))
+  :bind
+  (:term-raw-map
+   ("M-o" . other-window)
+   ("C-y" . paste-in-term))
+  :hook
+  (term-exec-hook . setup-term))
 
 ;; =============================================================================
 
 ;; Configure proced-narrow
-(use-package proced-narrow
-  :bind (:map proced-mode-map
-	      ("/" . proced-narrow)))
+(leaf proced-narrow
+  :bind
+  (:proced-mode-map
+   ("/" . proced-narrow)))
 
 ;; =============================================================================
 
 ;; Configure nix-dienv
-(use-package direnv
+(leaf direnv
   :config
   (direnv-mode))
 
 ;; =============================================================================
 
 ;; Configure vue-mode
-(use-package vue-mode)
+(leaf vue-mode)
 
 ;; =============================================================================
 
 ;; Configure elm-mode
-(use-package elm-mode)
+(leaf elm-mode)
 
 ;; =============================================================================
 
 ;; Configure nix-mode
-(use-package nix-mode)
+(leaf nix-mode)
 
 ;; =============================================================================
 
 ;; Configure helm
-(use-package helm
-  :demand t
-  :bind (("M-x" . helm-M-x)
-	 ("C-x C-f" . helm-find-files)
-	 ("M-/" . helm-dabbrev)
-	 ("C-x b" . helm-mini)
-	 ("C-c h" . helm-command-prefix)
-	 ("C-c g" . helm-google-suggest))
-  :custom (helm-split-window-in-side-p t)
-  :config (helm-mode 1))
+(leaf helm
+  :leaf-defer nil
+  :bind
+  ("M-x" . helm-M-x)
+  ("C-x C-f" . helm-find-files)
+  ("M-/" . helm-dabbrev)
+  ("C-x b" . helm-mini)
+  ("C-c h" . helm-command-prefix)
+  ("C-c g" . helm-google-suggest)
+  :custom
+  (helm-split-window-in-side-p . t)
+  :config
+  (helm-mode 1))
 
 ; :bind cannot be used as eshell has a bug
-(use-package helm-eshell
+(leaf helm-eshell
   :init
   (defun setup-eshell-env ()
     "Set up the eshell environment"
     (define-key eshell-mode-map (kbd "M-/") 'helm-eshell-history))
-  :hook ((eshell-mode . setup-eshell-env)))
+  :hook
+  (eshell-mode-hook . setup-eshell-env))
 
 ;; =============================================================================
 
 ;; Blog settings
-(use-package org-static-blog
-  :init
-  (setq header_ "
+(leaf org-static-blog
+  :pre-setq
+  (header_ . "
 <link rel=\"stylesheet\"
       type=\"text/css\"
       href=\"https://gongzhitaao.org/orgcss/org.css\"/>
 ")
-  (setq preamble_ "
+  (preamble_ . "
 <div style=\"display: flex; justify-content: space-between; width: 100%\">
   <div>٩(^‿^)۶</div>
   <div><a href=\"./index.html\">Home</a></div>
@@ -238,7 +245,7 @@
   <div><a href=\"./rss.xml\">RSS</a></div>
 </div>
 ")
-  (setq postamble_ "
+  (postamble_ . "
 <small>
 Site built by
 <a href=\"https://github.com/bastibe/org-static-blog\">org-static-blog</a>
@@ -249,24 +256,23 @@ available on Github</a>.
 </small>
 ")
   :custom
-  (org-static-blog-publish-title "Adithya Obilisetty")
-  (org-static-blog-publish-url "./")
-  (org-static-blog-publish-directory (rel-prog "blog/"))
-  (org-static-blog-posts-directory (rel-prog "blog/posts/"))
-  (org-static-blog-drafts-directory (rel-prog "blog/drafts/"))
-  (org-static-blog-enable-tags nil)
-  (org-export-with-toc t)
-  (org-export-with-section-numbers t)
-  (org-static-blog-use-preview t)
-  :config
-  (setq org-static-blog-page-header header_)
-  (setq org-static-blog-page-preamble preamble_)
-  (setq org-static-blog-page-postamble postamble_))
+  (org-static-blog-publish-title . "Adithya Obilisetty")
+  (org-static-blog-publish-url . "./")
+  `(org-static-blog-publish-directory . ,(rel-prog "blog/"))
+  `(org-static-blog-posts-directory . ,(rel-prog "blog/posts/"))
+  `(org-static-blog-drafts-directory . ,(rel-prog "blog/drafts/"))
+  (org-static-blog-enable-tags . nil)
+  (org-export-with-toc . t)
+  (org-export-with-section-numbers . t)
+  (org-static-blog-use-preview . t)
+  (org-static-blog-page-header . header_)
+  (org-static-blog-page-preamble . preamble_)
+  (org-static-blog-page-postamble . postamble_))
 
 ;; =============================================================================
 
 ;; Configure doom-modeline
-(use-package doom-modeline
+(leaf doom-modeline
   :config
   (doom-modeline-init)
   (doom-modeline-mode 1))
@@ -274,57 +280,54 @@ available on Github</a>.
 ;; =============================================================================
 
 ;; Configure forge
-(use-package forge)
+(leaf forge)
 
 ;; =============================================================================
 
 ;; Fira code font
-(use-package frame
+(leaf frame
   :config
   (set-frame-font "Fira Code" nil t))
 
 ;; =============================================================================
 
 ;; Fira code font
-(use-package fira-code-mode
+(leaf fira-code-mode
   :config
   (global-fira-code-mode))
 
 ;; =============================================================================
 
 ;; Configure ox-reveal
-(use-package ox-reveal)
+(leaf ox-reveal)
 
 ;; =============================================================================
 
 ;; Configure org
-(use-package org
-  :demand t
-  :init
-  (setq tasks-file (rel-org "tasks.org"))
-  :bind (("C-c c" . org-capture)
-	 :map org-mode-map
-	 ("<C-return>" . er/expand-region))
+(leaf org
+  :leaf-defer nil
+  :pre-setq
+  `(tasks-file . ,(rel-org "tasks.org"))
+  :bind
+  ("C-c c" . org-capture)
+  (:org-mode-map
+   ("<C-return>" . er/expand-region))
   :custom
   ;; Org mode work flow - Kanban style
   (org-todo-keywords
-   '((sequence "TODO" "DOING" "BLOCKED" "REVIEW" "|" "DONE" "ARCHIVED")))
+   . '((sequence "TODO" "DOING" "BLOCKED" "REVIEW" "|" "DONE" "ARCHIVED")))
   ;; Setting Colours (faces) for todo states to give clearer view of work
   (org-todo-keyword-faces
-   '(("TODO" . org-warning)
-     ("DOING" . "yellow")
-     ("BLOCKED" . "red")
-     ("REVIEW" . "orange")
-     ("DONE" . "green")
-     ("ARCHIVED" .  "blue")))
-  :config
-  (setq org-capture-templates
-	'(("t" "Todo" entry
-	   (file+headline tasks-file "Tasks")
-	   "* TODO %?\n %i\n %a")
-	  ("j" "Journal" entry
-	   (file+olp+datetree "~/org/journal.org")
-	   "* %?\nEntered on %U\n  %i\n  %a"))))
+   . '(("TODO" . org-warning)
+       ("DOING" . "yellow")
+       ("BLOCKED" . "red")
+       ("REVIEW" . "orange")
+       ("DONE" . "green")
+       ("ARCHIVED" .  "blue")))
+  (org-capture-templates
+   . '(("t" "Todo" entry
+	(file+headline tasks-file "Tasks")
+	"* TODO %?\n  %i"))))
 
 (defun tasks ()
   "Open the tasks file."
@@ -334,41 +337,42 @@ available on Github</a>.
 ;; =============================================================================
 
 ;; Hilight text that extends beyond a certain column
-(use-package column-enforce-mode
+(leaf column-enforce-mode
   :config
   (global-column-enforce-mode t))
 
 ;; =============================================================================
 
 ;; Git prompt in eshell
-(use-package eshell-git-prompt
+(leaf eshell-git-prompt
   :config
   (eshell-git-prompt-use-theme 'robbyrussell))
 
 ;; =============================================================================
 
 ;; Configure theme
-(use-package doom-themes
+(leaf doom-themes
   :config
   (load-theme 'doom-palenight t))
 
 ;; =============================================================================
 
-(use-package faces
+(leaf faces
   :custom-face
-  (mode-line-inactive ((t (:background "#232635" :foreground "#676E95" :box nil)))))
+  (mode-line-inactive
+   . '((t (:background "#232635" :foreground "#676E95" :box nil)))))
 
 ;; =============================================================================
 
-(use-package highlight-function-calls
+(leaf highlight-function-calls
   :custom-face
-  (highlight-function-calls-face ((t (:weight bold)))))
+  (highlight-function-calls-face . '((t (:weight bold)))))
 
 ;; =============================================================================
 
 ;; Configure impatient-mode
 ;; Look at markdown in a clean format
-(use-package impatient-mode
+(leaf impatient-mode
   :config
   (defun markdown-html (buffer)
     (princ
@@ -382,76 +386,79 @@ available on Github</a>.
 ;; =============================================================================
 
 ;; Configure expand-region
-(use-package expand-region
-  :bind (("C-=" . er/expand-region)
-	 ("<C-return>" . er/expand-region)
-	 ("C--" . er/contract-region))
+(leaf expand-region
+  :bind
+  ("C-=" . er/expand-region)
+  ("<C-return>" . er/expand-region)
+  ("C--" . er/contract-region)
   :config
   (pending-delete-mode t))
 
 ;; =============================================================================
 
 ;; Configure magit
-(use-package magit
-  :bind (("C-x g" . magit-status)))
+(leaf magit
+  :bind
+  ("C-x g" . magit-status))
 
 ;; =============================================================================
 
 ;; Configure haskell-mode
-(use-package haskell-mode
+(leaf haskell-mode
   :custom
-  (haskell-tags-on-save nil)
-  (tags-revert-without-query t)
-  (haskell-compile-cabal-build-command "cabal v2-build")
+  (haskell-tags-on-save . nil)
+  (tags-revert-without-query . t)
+  (haskell-compile-cabal-build-command . "cabal v2-build")
   :hook
-  ((haskell-mode . turn-on-haskell-indent)))
+  (haskell-mode-hook . turn-on-haskell-indent))
 
 ;; =============================================================================
 
 ;; Configure projectile
-(use-package projectile
-  :demand t
+(leaf projectile
+  :leaf-defer nil
   :custom
-  (projectile-completion-system 'helm)
-  (projectile-project-search-path `(,path-prog))
+  (projectile-completion-system . 'helm)
+  (projectile-project-search-path . `(,path-prog))
   :config
   (projectile-mode +1)
   :bind
-  (:map projectile-mode-map
-	("C-c p" . projectile-command-map)))
+  (:projectile-mode-map
+   ("C-c p" . projectile-command-map)))
 
 ;; =============================================================================
 
 ;; Configure helm-projectile
-(use-package helm-projectile
-  :after (projectile)
+(leaf helm-projectile
+  :after projectile helm
   :config
   (helm-projectile-on))
 
 ;; =============================================================================
 
 ;; Configure multiple-cursors
-(use-package multiple-cursors
-  :bind (("C->" . mc/mark-next-like-this)
-	 ("C-<" . mc/mark-previous-like-this)))
+(leaf multiple-cursors
+  :bind
+  ("C->" . mc/mark-next-like-this)
+  ("C-<" . mc/mark-previous-like-this))
 
 ;; =============================================================================
 
 ;; Configure avy
-(use-package avy
+(leaf avy
   :custom
-  (avy-keys '(?a ?s ?d ?f ?q ?w ?e ?r ?n ?m ?j ?k ?l ?o ?p))
-  (avy-background t)
-  (avy-orders-alist '((avy-goto-word-0 . avy-order-closest)
-			   (avy-goto-word-1 . avy-order-closest)))
-  (avy-all-windows nil)
+  (avy-keys . '(?a ?s ?d ?f ?q ?w ?e ?r ?n ?m ?j ?k ?l ?o ?p))
+  (avy-background . t)
+  (avy-orders-alist . '((avy-goto-word-0 . avy-order-closest)
+			(avy-goto-word-1 . avy-order-closest)))
+  (avy-all-windows . nil)
   :bind
-  (("M-RET" . avy-goto-word-0)))
+  ("M-RET" . avy-goto-word-0))
 
 ;; =============================================================================
 
 ;; Configure hydra
-(use-package hydra
+(leaf hydra
   :config
   (global-set-key
    (kbd "C-c m")
@@ -476,8 +483,9 @@ available on Github</a>.
 
 ;; Configure highlight-function-calls
 ;; Highlight emacs function calls
-(use-package highlight-function-calls
-  :hook ((emacs-lisp-mode . highlight-function-calls-mode)))
+(leaf highlight-function-calls
+  :hook
+  (emacs-lisp-mode-hook . highlight-function-calls-mode))
 
 ;; =============================================================================
 
@@ -560,7 +568,9 @@ the beginning of the line"
   (interactive)
   (cabalcc cabalcc-target))
 
-(define-key haskell-mode-map (kbd "C-c C-c") 'cabalcc-target)
+(leaf haskell-mode
+  :bind
+  (:haskell-mode-map ("C-c C-c" . cabalcc-target)))
 
 ;; =============================================================================
 
@@ -663,9 +673,13 @@ Version 2018-04-02T14:38:04-07:00"
 ;; =============================================================================
 
 ;; Configure hindent
-(use-package hindent
-  :demand t
-  :hook ((haskell-mode . hindent-mode))
+(leaf hindent
+  :leaf-defer nil
+  :hook
+  (haskell-mode-hook . hindent-mode)
+  :bind
+  (:hindent-mode-map
+   ([remap fill-paragraph] . hindent-reformat-decl-or-fill-cpp))
   :config
   ;; Try to work with both, hindent and CPP
   (setq alist-haskell-cpp
@@ -704,18 +718,15 @@ Version 2018-04-02T14:38:04-07:00"
       (progn
 	  (setq move-point (point))
 	  (hindent-reformat-decl-cpp)
-	  (goto-char move-point))))
-  :bind
-  (:map hindent-mode-map
-	([remap fill-paragraph] . hindent-reformat-decl-or-fill-cpp)))
+	  (goto-char move-point)))))
 
 ;; =============================================================================
 
 ;; Configure ghcid
-(use-package ghcid
-  :after (projectile)
+(leaf ghcid
+  :after projectile
+  :require s
   :config
-  (require 's)
   (defun set-default-target ()
     "Set a default ghcid-target"
     (setq ghcid-target
@@ -732,41 +743,40 @@ you ran this command from."
 
 ;; =============================================================================
 
-(use-package exwm-config :demand t)
-
 ;; Configure exwm
-(use-package exwm
-  :after (exwm-config)
+(leaf exwm
+  :if enable-exwm-p
+  :require exwm-config
   :init
   (defun rename-workspace-buffer ()
       "Rename buffer according to exwm-class-name"
     (exwm-workspace-rename-buffer exwm-class-name))
-  :demand t
+  :leaf-defer nil
+  :hook
+  (exwm-update-class-hook . rename-workspace-buffer)
   :custom
-  (exwm-workspace-number 2)
+  (exwm-workspace-number . 2)
   (exwm-input-simulation-keys
-   '(([?\C-b] . [left])
-     ([?\C-f] . [right])
-     ([?\C-p] . [up])
-     ([?\C-n] . [down])
-     ([?\M-f] . [C-right])
-     ([?\M-b] . [C-left])
-     ([?\C-a] . [home])
-     ([?\C-e] . [end])
-     ([?\M-p] . [prior])
-     ([?\M-n] . [next])
-     ([?\C-d] . [delete])
-     ([?\C-k] . [S-end C-x])
-     ([?\C-y] . [C-v])
-     ([?\M-w] . [C-c])
-     ([?\C-s] . [C-f])
-     ([?\C-g] . [escape])))
+   . '(([?\C-b] . [left])
+       ([?\C-f] . [right])
+       ([?\C-p] . [up])
+       ([?\C-n] . [down])
+       ([?\M-f] . [C-right])
+       ([?\M-b] . [C-left])
+       ([?\C-a] . [home])
+       ([?\C-e] . [end])
+       ([?\M-p] . [prior])
+       ([?\M-n] . [next])
+       ([?\C-d] . [delete])
+       ([?\C-k] . [S-end C-x])
+       ([?\C-y] . [C-v])
+       ([?\M-w] . [C-c])
+       ([?\C-s] . [C-f])
+       ([?\C-g] . [escape])))
   :config
   (exwm-input-set-key (kbd "C-c o") #'exwm-workspace-switch)
   (exwm-input-set-key  (kbd "M-o") #'other-window)
   (push (kbd "<escape>") exwm-input-prefix-keys)
-  (if enable-exwm
-      (exwm-enable))
-  :hook ((exwm-update-class . rename-workspace-buffer)))
+  (exwm-enable))
 
 ;; =============================================================================

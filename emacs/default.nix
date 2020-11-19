@@ -52,5 +52,6 @@
       helm
       helm-projectile
       use-package
+      leaf
     ];
 }

@@ -1,5 +1,30 @@
 ;; =============================================================================
 
+;;; Categories
+
+;; Many categories overlap. The idea is to choose the most relevant category.
+
+;; boot: Settings influencing the configuration.
+;; functionality: Behavioural change.
+
+;; theme
+;; visual: Text based settings.
+;; interface: UI based settings that affect the structure and elements.
+
+;; navigation
+;; editing
+
+;; alias: All the aliases.
+
+;; vcs
+;; project management
+;; integration: A different application that is used.
+;; development: Used specifically for development.
+
+;; =============================================================================
+
+;; boot
+
 ;; Configure paths
 (setq path-init "~/config/emacs/.emacs.d/")
 (setq path-prog "~/Desktop/Prog/")
@@ -20,10 +45,14 @@
 
 ;; =============================================================================
 
+;; boot
+
 ;; Variable to determine if exwm should be enabled
 (setq enable-exwm-p t)
 
 ;; =============================================================================
+
+;; visual
 
 ;; Set UTF-8 for env
 (set-language-environment "UTF-8")
@@ -31,15 +60,22 @@
 
 ;; =============================================================================
 
+;; boot
+
 ;; Set back-up files path
 (setq backup-directory-alist `(("." . "~/.saves/")))
 
 ;; =============================================================================
 
+;; functionality
+
 ;; Don't Go where the mouse follows
+;; Does not work well with exwm
 (setq mouse-autoselect-window nil)
 
 ;; =============================================================================
+
+;; boot
 
 ;; Dont use a custom file
 ;; Customize stuff by yourself
@@ -47,37 +83,53 @@
 
 ;; =============================================================================
 
+;; boot
+
 ;; Load path for elisp files
 (add-to-list 'load-path (rel-init "elisp"))
 
 ;; =============================================================================
 
+;; interface
+
 ;; Minimal UI
 (scroll-bar-mode -1)
 (tool-bar-mode -1)
 (menu-bar-mode -1)
+
+;; =============================================================================
+
+;; visual
+
 (global-display-line-numbers-mode)
 (blink-cursor-mode 1)
 (global-hl-line-mode 1)
-(display-time-mode 1)                ;; Display time
-(display-battery-mode 1)             ;; Display battery
+(display-time-mode 1)
+(display-battery-mode 1)
 
 ;; =============================================================================
 
-;; Prompt before kill
+;; functionality
+
 (setq confirm-kill-emacs 'yes-or-no-p)
 
 ;; =============================================================================
+
+;; functionality
 
 ;; Conservative scrolling
 (setq scroll-preserve-screen-position 'always)
 
 ;; =============================================================================
 
+;; functionality
+
 ;; Ignore ding
 (setq ring-bell-function 'ignore)
 
 ;; =============================================================================
+
+;; visual
 
 ;;disable splash screen and scratch message
 (setq inhibit-startup-message t)
@@ -85,20 +137,28 @@
 
 ;; =============================================================================
 
+;; boot
+
 ;; Auth keys sources
 (setq auth-sources '("~/.authinfo"))
 
 ;; =============================================================================
+
+;; visual
 
 ;; Set column length to 80
 (setq-default fill-column 80)
 
 ;; =============================================================================
 
+;; functionality
+
 ;; Onsave hook, remove spaces
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 ;; =============================================================================
+
+;; functionality
 
 ;; scroll one line at a time (less "jumpy" than defaults)
 (setq mouse-wheel-scroll-amount '(1 ((shift) . 1))) ;; one line at a time
@@ -107,6 +167,8 @@
 (setq scroll-step 1) ;; keyboard scroll one line at a time
 
 ;; =============================================================================
+
+;; functionality
 
 ;; Key bindings
 (global-set-key (kbd "M-o") 'other-window)
@@ -123,11 +185,15 @@
 
 ;; =============================================================================
 
+;; functionality
+
 ;; Use Alt+Arrow to jump to different windows
 ;; This does not work well with exwm
 (windmove-default-keybindings 'meta)
 
 ;; =============================================================================
+
+;; functionality
 
 ;; Default white space to match anything
 (setq search-whitespace-regexp ".*?")
@@ -137,6 +203,8 @@
 
 ;; =============================================================================
 
+;; visual
+
 ;; Hilight matching parenthesis
 (progn
   (setq show-paren-style 'parenthesis)
@@ -144,16 +212,24 @@
 
 ;; =============================================================================
 
+;; alias
+
 ;; Goto program dir when you type "prog"
 ;; Mostly used in eshell
 (defalias 'prog (lambda () (cd path-prog)))
 
 ;; =============================================================================
 
+;; functionality
+
 (defun nushell ()
   "Start a nu process in ansi-term"
   (interactive)
   (ansi-term "nu"))
+
+;; =============================================================================
+
+;; integration
 
 ;; Configure terminal for unicode and set nu
 (leaf term
@@ -172,6 +248,8 @@
 
 ;; =============================================================================
 
+;; integration
+
 ;; Configure proced-narrow
 (leaf proced-narrow
   :bind
@@ -180,6 +258,8 @@
 
 ;; =============================================================================
 
+;; integration
+
 ;; Configure nix-dienv
 (leaf direnv
   :config
@@ -187,20 +267,28 @@
 
 ;; =============================================================================
 
+;; development
+
 ;; Configure vue-mode
 (leaf vue-mode)
 
 ;; =============================================================================
+
+;; development
 
 ;; Configure elm-mode
 (leaf elm-mode)
 
 ;; =============================================================================
 
+;; development
+
 ;; Configure nix-mode
 (leaf nix-mode)
 
 ;; =============================================================================
+
+;; interface
 
 ;; Configure helm
 (leaf helm
@@ -227,6 +315,8 @@
   (eshell-mode-hook . setup-eshell-env))
 
 ;; =============================================================================
+
+;; integration
 
 ;; Blog settings
 (leaf org-static-blog
@@ -271,6 +361,8 @@ available on Github</a>.
 
 ;; =============================================================================
 
+;; interface
+
 ;; Configure doom-modeline
 (leaf doom-modeline
   :config
@@ -279,10 +371,14 @@ available on Github</a>.
 
 ;; =============================================================================
 
+;; vsc
+
 ;; Configure forge
 (leaf forge)
 
 ;; =============================================================================
+
+;; visual
 
 ;; Fira code font
 (leaf frame
@@ -291,6 +387,8 @@ available on Github</a>.
 
 ;; =============================================================================
 
+;; visual
+
 ;; Fira code font
 (leaf fira-code-mode
   :config
@@ -298,10 +396,14 @@ available on Github</a>.
 
 ;; =============================================================================
 
+;; integration
+
 ;; Configure ox-reveal
 (leaf ox-reveal)
 
 ;; =============================================================================
+
+;; org
 
 ;; Configure org
 (leaf org
@@ -336,12 +438,16 @@ available on Github</a>.
 
 ;; =============================================================================
 
+;; visual
+
 ;; Hilight text that extends beyond a certain column
 (leaf column-enforce-mode
   :config
   (global-column-enforce-mode t))
 
 ;; =============================================================================
+
+;; visual
 
 ;; Git prompt in eshell
 (leaf eshell-git-prompt
@@ -350,12 +456,16 @@ available on Github</a>.
 
 ;; =============================================================================
 
+;; theme
+
 ;; Configure theme
 (leaf doom-themes
   :config
   (load-theme 'doom-palenight t))
 
 ;; =============================================================================
+
+;; theme
 
 (leaf faces
   :custom-face
@@ -364,11 +474,15 @@ available on Github</a>.
 
 ;; =============================================================================
 
+;; development -> elisp
+
 (leaf highlight-function-calls
   :custom-face
   (highlight-function-calls-face . '((t (:weight bold)))))
 
 ;; =============================================================================
+
+;; integration
 
 ;; Configure impatient-mode
 ;; Look at markdown in a clean format
@@ -385,6 +499,8 @@ available on Github</a>.
 
 ;; =============================================================================
 
+;; editing
+
 ;; Configure expand-region
 (leaf expand-region
   :bind
@@ -396,12 +512,16 @@ available on Github</a>.
 
 ;; =============================================================================
 
+;; vcs
+
 ;; Configure magit
 (leaf magit
   :bind
   ("C-x g" . magit-status))
 
 ;; =============================================================================
+
+;; development -> haskell
 
 ;; Configure haskell-mode
 (leaf haskell-mode
@@ -413,6 +533,8 @@ available on Github</a>.
   (haskell-mode-hook . turn-on-haskell-indent))
 
 ;; =============================================================================
+
+;; project management
 
 ;; Configure projectile
 (leaf projectile
@@ -428,6 +550,8 @@ available on Github</a>.
 
 ;; =============================================================================
 
+;; project management
+
 ;; Configure helm-projectile
 (leaf helm-projectile
   :after projectile helm
@@ -436,6 +560,8 @@ available on Github</a>.
 
 ;; =============================================================================
 
+;; editing
+
 ;; Configure multiple-cursors
 (leaf multiple-cursors
   :bind
@@ -443,6 +569,8 @@ available on Github</a>.
   ("C-<" . mc/mark-previous-like-this))
 
 ;; =============================================================================
+
+;; navigation
 
 ;; Configure avy
 (leaf avy
@@ -456,6 +584,8 @@ available on Github</a>.
   ("M-RET" . avy-goto-word-0))
 
 ;; =============================================================================
+
+;; editing
 
 ;; Configure hydra
 (leaf hydra
@@ -481,6 +611,8 @@ available on Github</a>.
 
 ;; =============================================================================
 
+;; development -> elisp
+
 ;; Configure highlight-function-calls
 ;; Highlight emacs function calls
 (leaf highlight-function-calls
@@ -489,6 +621,8 @@ available on Github</a>.
 
 ;; =============================================================================
 
+;; functionality
+
 ;; Handy function to open my init file
 (defun open-init-file ()
   "Open the init file."
@@ -496,6 +630,8 @@ available on Github</a>.
   (find-file (rel-init "init.el")))
 
 ;; =============================================================================
+
+;; navigation
 
 ;; Use C-a to move to beginning of line and first indentation
 (defun smarter-move-point ()
@@ -513,6 +649,8 @@ the beginning of the line"
 
 ;; =============================================================================
 
+;; functionality
+
 ;; Open buffer list/switch
 (defun buffer-list-switch ()
   "Switch to buffer list and activate the window"
@@ -521,6 +659,8 @@ the beginning of the line"
   (select-window (get-buffer-window "*Buffer List*" 0)))
 
 ;; =============================================================================
+
+;; development -> haskell
 
 ;; Haskell auto show core script
 (defun produce-core (file-path &optional ghc-path args)
@@ -545,6 +685,8 @@ the beginning of the line"
   (produce-core (buffer-file-name) "ghc" "-dsuppress-all -O2"))
 
 ;; =============================================================================
+
+;; development -> haskell
 
 ;; cabal check open-repl/close
 (defvar cabalcc-target)
@@ -573,6 +715,8 @@ the beginning of the line"
   (:haskell-mode-map ("C-c C-c" . cabalcc-target)))
 
 ;; =============================================================================
+
+;; editing
 
 ;; Custom function to delete blank lines & spaces, Thanks ergoemacs!
 (defun xah-delete-blank-lines ()
@@ -650,6 +794,8 @@ Version 2018-04-02T14:38:04-07:00"
 
 ;; =============================================================================
 
+;; navigation
+
 ;; Scroll by min(Paragraph, Half screen)
 
 (defun is-empty-line ()
@@ -671,6 +817,8 @@ Version 2018-04-02T14:38:04-07:00"
 (global-set-key (kbd "M-p") (lambda () (interactive) (smart-jump -20)))
 
 ;; =============================================================================
+
+;; development -> haskell
 
 ;; Configure hindent
 (leaf hindent
@@ -722,6 +870,8 @@ Version 2018-04-02T14:38:04-07:00"
 
 ;; =============================================================================
 
+;; development -> haskell
+
 ;; Configure ghcid
 (leaf ghcid
   :after projectile
@@ -742,6 +892,8 @@ you ran this command from."
     (ghcid-start (projectile-project-root))))
 
 ;; =============================================================================
+
+;; interface
 
 ;; Configure exwm
 (leaf exwm

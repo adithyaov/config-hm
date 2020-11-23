@@ -50,7 +50,9 @@
       direnv
       org-static-blog
       helm
+      helm-rg
       helm-projectile
+      helm-exwm
       use-package
       leaf
     ];

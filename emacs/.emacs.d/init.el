@@ -310,7 +310,7 @@
   :init
   (defun setup-eshell-env ()
     "Set up the eshell environment"
-    (define-key eshell-mode-map (kbd "M-/") 'helm-eshell-history))
+    (define-key eshell-mode-map (kbd "C-r") 'helm-eshell-history))
   :hook
   (eshell-mode-hook . setup-eshell-env))
 
@@ -875,7 +875,7 @@ Version 2018-04-02T14:38:04-07:00"
 ;; Configure ghcid
 (leaf ghcid
   :after projectile
-  :require s
+  :require s ghcid
   :config
   (defun set-default-target ()
     "Set a default ghcid-target"

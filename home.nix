@@ -54,6 +54,8 @@ let
       fira-code
       fira-code-symbols
       nixfmt
+      xdotool
+      xbindkeys
     ];
 
     xresources.properties = {

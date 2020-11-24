@@ -63,7 +63,7 @@
 ;; boot
 
 ;; Variable to determine if exwm should be enabled
-(setq enable-exwm-p nil)
+(setq enable-exwm-p t)
 
 ;; =============================================================================
 
@@ -376,37 +376,21 @@ margin-right: 10px;
 }
 #postamble {
  padding-top: 30px;
-prod-bottom: 80px;
-}
-#archive {
-prod-top :20px
-}
-#content p {
-prod-bottom: 10px;
-}
-#content h2 {
-prod-bottom: 5px;
-prod-top: 25px;
-}
-.outline-2 {
-prod-bottom: 5px;
-}
-.outline-2 h2 {
-prod-bottom: 15px;
-}
-.outline-2 p {
-madding-bottom: 15px;
 }
 .outline-2 .section-number-2 {
-  position: absolute;
-  margin-left: -30px;
+  float: right;
+  opacity: 0.6;
+}
+.outline-3 .section-number-3 {
+  float: right;
+  opacity: 0.6;
+}
+.outline-4 .section-number-4 {
+  float: right;
   opacity: 0.6;
 }
 #table-of-contents ul li {
 list-style: none;
-}
-#table-of-contents h2 {
-prod-bottom: 15px;
 }
 </style>
 
@@ -426,7 +410,7 @@ prod-bottom: 15px;
 <small>
 Site built by
 <a href=\"https://github.com/bastibe/org-static-blog\">org-static-blog</a>
-& <a href=\"https://github.com/gongzhitaao/orgcss\">orgcss</a>.
+& <a href=\"https://github.com/gongzhitaao/orgcss\">milligram</a>.
 The source code is
 <a href=\"https://github.com/adithyaov/adithyaov.github.io\">
 available on Github</a>.
@@ -560,7 +544,10 @@ available on Github</a>.
 ;; This should be done after setting the theme
 ;; Fira code font
 (set-frame-font "Fira Code" nil t)
-(set-face-attribute 'default nil :family "Fira Code" :height 110)
+
+(if enable-exwm-p
+    (set-face-attribute 'default nil :family "Fira Code" :height 100)
+  (set-face-attribute 'default nil :family "Fira Code" :height 110))
 
 ;; =============================================================================
 

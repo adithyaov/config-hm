@@ -348,69 +348,59 @@
 (leaf org-static-blog
   :pre-setq
   (header_ . "
-<link rel=\"stylesheet\"
-      href=\"https://unpkg.com/sakura.css/css/normalize.css\" type=\"text/css\">
-
-<!-- Google Fonts -->
-<link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic\">
-
 <!-- CSS Reset -->
-<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.css\">
+<link rel=\"stylesheet\"
+href=\"https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.css\">
 
 <!-- Milligram CSS -->
-<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.1/milligram.css\">
+<link rel=\"stylesheet\"
+href=\"https://screencss.com/screen-0.4.0.css\">
 
 <style>
 body {
-max-width: 900px;
-padding: 30px;
-margin: auto;
-}
-#preamble {
- padding-top: 80px
+  max-width: 700px;
+  padding: 30px;
+  padding-top: 50px;
+  padding-bottom: 50px;
+  margin: auto;
 }
 header nav li {
-list-style: none;
-display: inline-block;
-margin-right: 10px;
-}
-#postamble {
- padding-top: 30px;
-}
-.outline-2 .section-number-2 {
-  float: right;
-  opacity: 0.6;
-}
-.outline-3 .section-number-3 {
-  float: right;
-  opacity: 0.6;
-}
-.outline-4 .section-number-4 {
-  float: right;
-  opacity: 0.6;
+  list-style: none;
+  display: inline-block;
+  margin-left: 0px;
+  margin-right: 15px;
 }
 #table-of-contents ul li {
-list-style: none;
+  list-style: none;
+}
+.post-date {
+  display: none;
+}
+#archive {
+  display: none;
+}
+h1 {
+  margin-top: 0.8em;
 }
 </style>
 
 ")
   (preamble_ . "
-<header>
-      <nav>
-        <ul>
-          <li><a href=\"./index.html\">Home</a></li>
-          <li><a href=\"./about.html\">About</a></li>
-          <li><a href=\"./archive.html\">Archive</a></li>
-        </ul>
-      </nav>
-</header>
+<div class=\"large bold\" style=\"line-height:24px\">Adithya Obilisetty</div>
+<div>Food & functional programming</div>
+<div style=\"margin-top: 10px;\">
+  <a class=\"nowrap\" href=\"./index.html\">Writing</a>
+  &middot; <a class=\"nowrap\" href=\"./about.html\">About</a>
+  &middot; <a class=\"nowrap\" href=\"https://www.github.com\">Github</a>
+</div>
+<hr />
 ")
   (postamble_ . "
+<hr />
 <small>
 Site built by
 <a href=\"https://github.com/bastibe/org-static-blog\">org-static-blog</a>
-& <a href=\"https://github.com/gongzhitaao/orgcss\">milligram</a>.
+& <a href=\"https://screencss.com/\">screen</a>.
 The source code is
 <a href=\"https://github.com/adithyaov/adithyaov.github.io\">
 available on Github</a>.
@@ -424,14 +414,16 @@ available on Github</a>.
   `(org-static-blog-drafts-directory . ,(rel-prog "blog/drafts/"))
   (org-static-blog-enable-tags . nil)
   (org-export-with-toc . t)
-  (org-export-with-section-numbers . t)
+  (org-export-with-section-numbers . nil)
   (org-static-blog-use-preview . t)
   (org-static-blog-page-header . header_)
   (org-static-blog-page-preamble . preamble_)
   (org-static-blog-preview-ellipsis . "")
   (org-static-blog-page-postamble . postamble_))
 
-; (org-static-blog-publish t)
+;; (org-static-blog-publish t)
+;; (dired org-static-blog-posts-directory)
+
 
 ;; =============================================================================
 

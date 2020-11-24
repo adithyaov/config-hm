@@ -1005,7 +1005,7 @@ you ran this command from."
   :config
   (exwm-input-set-key (kbd "C-c o") #'exwm-workspace-switch)
   (exwm-input-set-key  (kbd "M-o") #'other-window)
-  (push (kbd "<escape>") exwm-input-prefix-keys)
+  (push (aref (kbd "<escape>") 0) exwm-input-prefix-keys)
   (exwm-enable))
 
 ;; =============================================================================

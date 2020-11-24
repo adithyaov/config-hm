@@ -47,8 +47,23 @@
 
 ;; boot
 
+;; Modernize emacs by never runnung GC
+
+(defun my-minibuffer-setup-hook ()
+  (setq gc-cons-threshold most-positive-fixnum))
+
+(defun my-minibuffer-exit-hook ()
+  (setq gc-cons-threshold 800000))
+
+(add-hook 'minibuffer-setup-hook #'my-minibuffer-setup-hook)
+(add-hook 'minibuffer-exit-hook #'my-minibuffer-exit-hook)
+
+;; =============================================================================
+
+;; boot
+
 ;; Variable to determine if exwm should be enabled
-(setq enable-exwm-p t)
+(setq enable-exwm-p nil)
 
 ;; =============================================================================
 
@@ -180,6 +195,9 @@
 (global-set-key (kbd "C-r") 'isearch-backward)
 (global-set-key (kbd "C-x C-b") 'buffer-list-switch)
 
+;; This is useful for deleting active regions as well
+(global-set-key (kbd "C-d") 'delete-forward-char)
+
 ;; Translate ESC to C-c, We have no use for ESC
 (define-key key-translation-map (kbd "ESC") (kbd "C-c"))
 
@@ -276,6 +294,14 @@
 
 ;; development
 
+;; Configure vue-mode
+(add-hook 'prog-mode-hook #'flyspell-prog-mode)
+(global-set-key (kbd "C-'") 'ispell-word)
+
+;; =============================================================================
+
+;; development
+
 ;; Configure elm-mode
 (leaf elm-mode)
 
@@ -312,7 +338,7 @@
     "Set up the eshell environment"
     (define-key eshell-mode-map (kbd "C-r") 'helm-eshell-history))
   :hook
-  (eshell-mode-hook . setup-eshell-env))
+   (eshell-mode-hook . setup-eshell-env))
 
 ;; =============================================================================
 
@@ -323,17 +349,78 @@
   :pre-setq
   (header_ . "
 <link rel=\"stylesheet\"
-      type=\"text/css\"
-      href=\"https://gongzhitaao.org/orgcss/org.css\"/>
+      href=\"https://unpkg.com/sakura.css/css/normalize.css\" type=\"text/css\">
+
+<!-- Google Fonts -->
+<link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic\">
+
+<!-- CSS Reset -->
+<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.css\">
+
+<!-- Milligram CSS -->
+<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.1/milligram.css\">
+
+<style>
+body {
+max-width: 900px;
+padding: 30px;
+margin: auto;
+}
+#preamble {
+ padding-top: 80px
+}
+header nav li {
+list-style: none;
+display: inline-block;
+margin-right: 10px;
+}
+#postamble {
+ padding-top: 30px;
+prod-bottom: 80px;
+}
+#archive {
+prod-top :20px
+}
+#content p {
+prod-bottom: 10px;
+}
+#content h2 {
+prod-bottom: 5px;
+prod-top: 25px;
+}
+.outline-2 {
+prod-bottom: 5px;
+}
+.outline-2 h2 {
+prod-bottom: 15px;
+}
+.outline-2 p {
+madding-bottom: 15px;
+}
+.outline-2 .section-number-2 {
+  position: absolute;
+  margin-left: -30px;
+  opacity: 0.6;
+}
+#table-of-contents ul li {
+list-style: none;
+}
+#table-of-contents h2 {
+prod-bottom: 15px;
+}
+</style>
+
 ")
   (preamble_ . "
-<div style=\"display: flex; justify-content: space-between; width: 100%\">
-  <div>٩(^‿^)۶</div>
-  <div><a href=\"./index.html\">Home</a></div>
-  <div><a href=\"./about.html\">About</a></div>
-  <div><a href=\"./archive.html\">Archive</a></div>
-  <div><a href=\"./rss.xml\">RSS</a></div>
-</div>
+<header>
+      <nav>
+        <ul>
+          <li><a href=\"./index.html\">Home</a></li>
+          <li><a href=\"./about.html\">About</a></li>
+          <li><a href=\"./archive.html\">Archive</a></li>
+        </ul>
+      </nav>
+</header>
 ")
   (postamble_ . "
 <small>
@@ -357,7 +444,10 @@ available on Github</a>.
   (org-static-blog-use-preview . t)
   (org-static-blog-page-header . header_)
   (org-static-blog-page-preamble . preamble_)
+  (org-static-blog-preview-ellipsis . "")
   (org-static-blog-page-postamble . postamble_))
+
+(org-static-blog-publish t)
 
 ;; =============================================================================
 
@@ -375,15 +465,6 @@ available on Github</a>.
 
 ;; Configure forge
 (leaf forge)
-
-;; =============================================================================
-
-;; visual
-
-;; Fira code font
-(leaf frame
-  :config
-  (set-frame-font "Fira Code" nil t))
 
 ;; =============================================================================
 
@@ -471,6 +552,15 @@ available on Github</a>.
   :custom-face
   (mode-line-inactive
    . '((t (:background "#232635" :foreground "#676E95" :box nil)))))
+
+;; =============================================================================
+
+;; visual
+
+;; This should be done after setting the theme
+;; Fira code font
+(set-frame-font "Fira Code" nil t)
+(set-face-attribute 'default nil :family "Fira Code" :height 110)
 
 ;; =============================================================================
 

@@ -431,7 +431,7 @@ available on Github</a>.
   (org-static-blog-preview-ellipsis . "")
   (org-static-blog-page-postamble . postamble_))
 
-(org-static-blog-publish t)
+; (org-static-blog-publish t)
 
 ;; =============================================================================
 

@@ -56,6 +56,7 @@ let
       nixfmt
       xdotool
       xbindkeys
+      meld
     ];
 
     xresources.properties = {

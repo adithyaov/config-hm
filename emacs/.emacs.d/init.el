@@ -26,7 +26,7 @@
 ;; boot
 
 ;; Configure paths
-(setq path-init "~/config/emacs/.emacs.d/")
+(setq path-init "~/.emacs.d/")
 (setq path-prog "~/Desktop/Prog/")
 (setq path-config "~/config/")
 (setq path-org "~/org/")
@@ -102,6 +102,15 @@
 
 ;; Load path for elisp files
 (add-to-list 'load-path (rel-init "elisp"))
+
+;; =============================================================================
+
+;; boot
+
+;; Load local packages
+;; (Installed via nix now)
+;; (add-to-list 'load-path (rel-init "elisp/org-static-blog"))
+;; (add-to-list 'load-path (rel-init "elisp/helm-org-static-blog"))
 
 ;; =============================================================================
 
@@ -351,65 +360,35 @@
 <!-- CSS Reset -->
 <link rel=\"stylesheet\"
 href=\"https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.css\">
-
-<!-- Milligram CSS -->
-<link rel=\"stylesheet\"
-href=\"https://screencss.com/screen-0.4.0.css\">
-
-<style>
-body {
-  max-width: 700px;
-  padding: 30px;
-  padding-top: 50px;
-  padding-bottom: 50px;
-  margin: auto;
-}
-header nav li {
-  list-style: none;
-  display: inline-block;
-  margin-left: 0px;
-  margin-right: 15px;
-}
-#table-of-contents ul li {
-  list-style: none;
-}
-.post-date {
-  display: none;
-}
-#archive {
-  display: none;
-}
-h1 {
-  margin-top: 0.8em;
-}
-</style>
-
+<link
+href=\"https://fonts.googleapis.com/css?family=Fira+Code:300,400\" rel=\"stylesheet\">
+<link
+href=\"typesetting.css\" rel=\"stylesheet\">
 ")
   (preamble_ . "
-<div class=\"large bold\" style=\"line-height:24px\">Adithya Obilisetty</div>
-<div>Food & functional programming</div>
-<div style=\"margin-top: 10px;\">
-  <a class=\"nowrap\" href=\"./index.html\">Writing</a>
-  &middot; <a class=\"nowrap\" href=\"./about.html\">About</a>
-  &middot; <a class=\"nowrap\" href=\"https://www.github.com\">Github</a>
+
+<div class=\"nav\">
+  <h3 class=\"nav-logo\">Adithya</h3>
+  <a class=\"nav-item\" href=\"./index.html\">Writing</a>
+  <a class=\"nav-item\" href=\"./about.html\">About</a>
+  <a class=\"nav-item\" href=\"./archive.html\">Archive</a>
 </div>
-<hr />
+
 ")
   (postamble_ . "
-<hr />
+
 <small>
-Site built by
-<a href=\"https://github.com/bastibe/org-static-blog\">org-static-blog</a>
-& <a href=\"https://screencss.com/\">screen</a>.
+Site built with
+<a href=\"https://github.com/bastibe/org-static-blog\">org-static-blog</a>.
 The source code is
 <a href=\"https://github.com/adithyaov/adithyaov.github.io\">
-available on Github</a>.
+available on github</a>.
 </small>
 ")
   :custom
   (org-static-blog-publish-title . "Adithya Obilisetty")
   (org-static-blog-publish-url . "./")
-  `(org-static-blog-publish-directory . ,(rel-prog "blog/"))
+  `(org-static-blog-publish-directory . ,(rel-prog "blog/dist/"))
   `(org-static-blog-posts-directory . ,(rel-prog "blog/posts/"))
   `(org-static-blog-drafts-directory . ,(rel-prog "blog/drafts/"))
   (org-static-blog-enable-tags . nil)
@@ -423,7 +402,6 @@ available on Github</a>.
 
 ;; (org-static-blog-publish t)
 ;; (dired org-static-blog-posts-directory)
-
 
 ;; =============================================================================
 

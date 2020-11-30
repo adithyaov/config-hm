@@ -11,14 +11,13 @@
       version = "1.4.0";
       src = builtins.fetchGit {
         url = "https://github.com/adithyaov/org-static-blog.git";
-        ref = "date-below-title";
+        ref = "master";
       };
       # XXX Is the recipe's :fetcher and :branch even used?
       recipe = pkgs.writeText "recipe" ''
         (org-static-blog
         :repo "adithyaov/org-static-blog"
-        :fetcher github
-        :branch "date-below-title")
+        :fetcher github)
       '';
     };
     helm-org-static-blog = super.melpaBuild rec {

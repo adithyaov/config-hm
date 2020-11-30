@@ -104,5 +104,6 @@ let
   node = import ./node.nix { inherit pkgs; };
   elm = import ./elm.nix { inherit pkgs; };
   python = import ./python.nix { inherit pkgs; };
+  composewell = import ./composewell.nix { inherit pkgs; };
 in
-merge [base dotfiles emacs haskell git rust node elm python]
+merge [base dotfiles emacs haskell git rust node elm python composewell]

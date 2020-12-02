@@ -56,8 +56,7 @@ let
       nixfmt
       xdotool
       xbindkeys
-      meld
-      vagrant
+      lxd
     ];
 
     xresources.properties = {

@@ -568,6 +568,47 @@ available on github</a>.
 
 ;; =============================================================================
 
+;; functionality
+
+;; Because I'm a winner
+;; And also because this is a convenient way to undo some setup
+(winner-mode)
+
+;; =============================================================================
+
+;; development
+
+;; Setting up ediff
+;; Mostly copied from https://oremacs.com/2015/01/17/setting-up-ediff/
+
+;; As the author says:
+;;
+;; > This macro I've put together myself after searching though the code base
+;;   and not finding something similar; custom-set-variables comes close to what
+;;   I want, or maybe custom-initialize-changed. Basically all I want is a setq
+;;   that is aware of the custom-set property of a variable. If you know such a
+;;   macro, please let me know.
+(defmacro csetq (variable value)
+  `(funcall (or (get ',variable 'custom-set)
+                'set-default)
+            ',variable ,value))
+
+;; I use exwm and weird setup with control panel in a separate frame will not
+;; work for me
+(csetq ediff-window-setup-function 'ediff-setup-windows-plain)
+
+;; Split the windows horizontally instead of vertically. This way, it's much
+;; easier to follow the changes.
+(csetq ediff-split-window-function 'split-window-horizontally)
+
+;; Ignore white space
+(csetq ediff-diff-options "-w")
+
+;; Reset look when quitting
+(add-hook 'ediff-after-quit-hook-internal 'winner-undo)
+
+;; =============================================================================
+
 ;; development -> haskell
 
 ;; Configure haskell-mode

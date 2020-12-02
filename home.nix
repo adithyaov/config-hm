@@ -57,6 +57,7 @@ let
       xdotool
       xbindkeys
       meld
+      vagrant
     ];
 
     xresources.properties = {

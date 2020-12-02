@@ -607,6 +607,14 @@ available on github</a>.
 ;; Reset look when quitting
 (add-hook 'ediff-after-quit-hook-internal 'winner-undo)
 
+;; Disable yes or no prompt
+;; https://emacs.stackexchange.com/questions/9322/how-can-i-quit-ediff-immediately-without-having-to-type-y
+(defun disable-y-or-n-p (orig-fun &rest args)
+  (cl-letf (((symbol-function 'y-or-n-p) (lambda (prompt) t)))
+    (apply orig-fun args)))
+
+(advice-add 'ediff-quit :around #'disable-y-or-n-p)
+
 ;; =============================================================================
 
 ;; development -> haskell

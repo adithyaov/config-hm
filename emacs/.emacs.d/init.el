@@ -31,8 +31,25 @@
 (setq path-config "~/config/")
 (setq path-org "~/org/")
 
+;; Remote hosts
+(setq remote-hosts
+      '((krishna . ("adithya@15.206.66.18" . "7997"))
+	(kaveri . ("adithya@15.206.117.201" . "7997"))))
+
+;; Helper to get the tramp path
+(defun tramp-path (server path)
+  (let* ((host-port (cdr (assoc server remote-hosts)))
+	 (host (car host-port))
+	 (port (cdr host-port)))
+    (concat "/ssh:" host "#" port ":" path)))
+
+;; Default path for tramp to search for nix executables
+(setq default-shared-nix "/nix/var/nix/profiles/default/bin/")
+
 ;; Remote paths
-(setq path-krishna "/ssh:adithya@15.206.66.18#7997:/home/adithya/")
+(setq path-krishna (tramp-path 'krishna "/home/adithya"))
+
+(setq path-kaveri (tramp-path 'kaveri "/home/adithya"))
 
 (defun rel-init (x)
   "Get a path relative to .emacs.d editable config"
@@ -49,6 +66,10 @@
 (defun rel-krishna (x)
   "Get a path relative to .emacs.d editable config"
   (concat (file-name-as-directory path-krishna) x))
+
+(defun rel-kaveri (x)
+  "Get a path relative to .emacs.d editable config"
+  (concat (file-name-as-directory path-kaveri) x))
 
 ;; =============================================================================
 
@@ -94,6 +115,16 @@
 ;; Don't Go where the mouse follows
 ;; Does not work well with exwm
 (setq mouse-autoselect-window nil)
+
+;; =============================================================================
+
+;; functionality
+
+;; Add the default shared nix path to tramp
+(progn
+  (require 'tramp)
+  (push default-shared-nix tramp-remote-path)
+  (add-to-list 'tramp-remote-path 'tramp-own-remote-path))
 
 ;; =============================================================================
 
@@ -524,12 +555,18 @@ available on github</a>.
 
 ;; =============================================================================
 
-;; development
+;; functionality
+(defmacro remote-server-setup (sname)
+  `(progn
+     (defun ,sname ()
+       (interactive)
+       (dired (tramp-path (quote ,sname) "/home/adithya")))
+     (defalias (quote ,sname)
+       (lambda () (cd (tramp-path (quote ,sname) "/home/adithya"))))))
 
-;; Connect to the remote Krishna server
-(defun krishna ()
-  (interactive)
-  (dired path-krishna))
+(remote-server-setup kaveri)
+
+(remote-server-setup krishna)
 
 ;; =============================================================================
 

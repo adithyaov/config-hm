@@ -653,6 +653,8 @@ available on github</a>.
   :custom
   (projectile-completion-system . 'helm)
   (projectile-project-search-path . `(,path-prog))
+  (projectile-indexing-method . 'native)
+  (projectile-enable-caching . t)
   :config
   (projectile-mode +1)
   :bind

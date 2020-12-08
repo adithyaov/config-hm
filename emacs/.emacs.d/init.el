@@ -31,6 +31,9 @@
 (setq path-config "~/config/")
 (setq path-org "~/org/")
 
+;; Remote paths
+(setq path-krishna "/ssh:adithya@15.206.66.18#7997:/home/adithya/")
+
 (defun rel-init (x)
   "Get a path relative to .emacs.d editable config"
   (concat (file-name-as-directory path-init) x))
@@ -42,6 +45,10 @@
 (defun rel-org (x)
   "Get a path relative to .emacs.d editable config"
   (concat (file-name-as-directory path-org) x))
+
+(defun rel-krishna (x)
+  "Get a path relative to .emacs.d editable config"
+  (concat (file-name-as-directory path-krishna) x))
 
 ;; =============================================================================
 
@@ -498,10 +505,6 @@ available on github</a>.
   :config
   (load-theme 'doom-palenight t))
 
-;; =============================================================================
-
-;; theme
-
 (leaf faces
   :custom-face
   (mode-line-inactive
@@ -516,8 +519,17 @@ available on github</a>.
 (set-frame-font "Fira Code" nil t)
 
 (if enable-exwm-p
-    (set-face-attribute 'default nil :family "Fira Code" :height 100)
+    (set-face-attribute 'default nil :family "Fira Code" :height 110)
   (set-face-attribute 'default nil :family "Fira Code" :height 110))
+
+;; =============================================================================
+
+;; development
+
+;; Connect to the remote Krishna server
+(defun krishna ()
+  (interactive)
+  (dired path-krishna))
 
 ;; =============================================================================
 
@@ -548,14 +560,17 @@ available on github</a>.
 
 ;; editing
 
+;; Treat sections as normal text selection
+(pending-delete-mode t)
+
+;; =============================================================================
+
 ;; Configure expand-region
 (leaf expand-region
   :bind
   ("C-=" . er/expand-region)
   ("<C-return>" . er/expand-region)
-  ("C--" . er/contract-region)
-  :config
-  (pending-delete-mode t))
+  ("C--" . er/contract-region))
 
 ;; =============================================================================
 
@@ -724,6 +739,13 @@ available on github</a>.
   "Open the init file."
   (interactive)
   (find-file (rel-init "init.el")))
+
+;; =============================================================================
+
+;; editing
+
+;; Wrap " around selected text
+(global-set-key (kbd "M-\"") 'insert-pair)
 
 ;; =============================================================================
 

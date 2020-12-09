@@ -7,6 +7,16 @@ let
     url = https://github.com/nix-community/emacs-overlay/archive/master.tar.gz;
   });
 
+  discordOverlay =
+    let url = https://discord.com/api/download?platform=linux&format=tar.gz;
+    in self: super: {
+      discord =
+        super.discord.overrideAttrs
+          (_: {
+            src = builtins.fetchTarball url;
+          });
+    };
+
   base = {
     # Let Home Manager install and manage itself.
     programs.home-manager.enable = true;
@@ -34,7 +44,7 @@ let
     programs.direnv.enableNixDirenvIntegration = true;
 
     nixpkgs.config.allowUnfree = true;
-    nixpkgs.overlays = [ emacsOverlay ];
+    nixpkgs.overlays = [ emacsOverlay discordOverlay ];
     home.packages = with pkgs; [
       hello
       cacert

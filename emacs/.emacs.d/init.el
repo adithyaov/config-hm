@@ -47,34 +47,36 @@
 
 ;; functionality
 
-;; Comfigure remote settings
-(setq remote-hosts
-      '((krishna . ("adithya@15.206.66.18" . "7997"))
-	(kaveri . ("adithya@15.206.117.201" . "7997"))))
+;; Configure remote settings
 
-(setq remote-hosts-default-path
-      '((krishna . "/home/adithya")
-	(_default . "/home/adithya")))
+;; A macro to setup an alias for the remote server
+(defmacro tramp-ssh-server-setup (&rest args)
+  (let* ((server (plist-get args :server))
+         (host (or (plist-get args :host) (error "No host specified")))
+	 (port (or (plist-get args :port) "22"))
+	 (user (or (plist-get args :user) (error "No user specified")))
+	 (home (or (plist-get args :home) "/"))
+	 (path (concat "/ssh:" user "@" host "#" port ":" home)))
+    `(defalias (quote ,server) (lambda () (cd ,path)))))
 
-;; Helper to get the tramp path
-(defmacro tramp-path (server path)
-  `(let* ((host-port (cdr (assoc (quote ,server) remote-hosts)))
-	  (host (car host-port))
-	  (port (cdr host-port)))
-     (concat "/ssh:" host "#" port ":" ,path)))
+;; =============================================================================
 
-(defmacro tramp-path-default (server)
-  `(let ((def-path (or (cdr (assoc (quote ,server) remote-hosts-default-path))
-		       (cdr (assoc '_default remote-hosts-default-path)))))
-     (tramp-path ,server def-path)))
+;; functionality
 
-;; A macro to set up an alias
-(defmacro eshell-remote-server-setup (sname)
-  `(defalias (quote ,sname)
-       (lambda () (cd (tramp-path-default ,sname)))))
+;; Setup kaveri
+(tramp-ssh-server-setup :server kaveri
+			:user "adithya"
+			:host "15.206.117.201"
+			:port "7997"
+			:home "/home/adithya")
 
-(dolist (elem remote-hosts)
-  (eval `(eshell-remote-server-setup ,(car elem))))
+;; Setup krishna
+(tramp-ssh-server-setup :server krishna
+			:user "adithya"
+			:host "15.206.66.18"
+			:port "7997"
+			:home "/home/adithya")
+
 
 ;; =============================================================================
 

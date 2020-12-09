@@ -286,12 +286,15 @@
 
 ;; Configure helm-mini
 (leaf helm-mini-config
-  :after helm bufler helm-bufler
-  :require helm-bufler
+  :after helm
   :setq (helm-mini-default-sources
-         . '(helm-bufler-source
+         . '(helm-source-buffers-list
              helm-source-recentf
              helm-source-buffer-not-found)))
+
+;; The following returns a list of Buffer names and buffers
+;; Use this while creating source for helm-mini
+;; (bufler-buffers :groups bufler-groups)
 
 ;; =============================================================================
 

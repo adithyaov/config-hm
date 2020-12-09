@@ -31,26 +31,6 @@
 (setq path-config "~/config/")
 (setq path-org "~/org/")
 
-;; Remote hosts
-(setq remote-hosts
-      '((krishna . ("adithya@15.206.66.18" . "7997"))
-	(kaveri . ("adithya@15.206.117.201" . "7997"))))
-
-;; Helper to get the tramp path
-(defun tramp-path (server path)
-  (let* ((host-port (cdr (assoc server remote-hosts)))
-	 (host (car host-port))
-	 (port (cdr host-port)))
-    (concat "/ssh:" host "#" port ":" path)))
-
-;; Default path for tramp to search for nix executables
-(setq default-shared-nix "/nix/var/nix/profiles/default/bin/")
-
-;; Remote paths
-(setq path-krishna (tramp-path 'krishna "/home/adithya"))
-
-(setq path-kaveri (tramp-path 'kaveri "/home/adithya"))
-
 (defun rel-init (x)
   "Get a path relative to .emacs.d editable config"
   (concat (file-name-as-directory path-init) x))
@@ -63,13 +43,51 @@
   "Get a path relative to .emacs.d editable config"
   (concat (file-name-as-directory path-org) x))
 
-(defun rel-krishna (x)
-  "Get a path relative to .emacs.d editable config"
-  (concat (file-name-as-directory path-krishna) x))
+;; =============================================================================
 
-(defun rel-kaveri (x)
-  "Get a path relative to .emacs.d editable config"
-  (concat (file-name-as-directory path-kaveri) x))
+;; functionality
+
+;; Comfigure remote settings
+(setq remote-hosts
+      '((krishna . ("adithya@15.206.66.18" . "7997"))
+	(kaveri . ("adithya@15.206.117.201" . "7997"))))
+
+(setq remote-hosts-default-path
+      '((krishna . "/home/adithya")
+	(_default . "/home/adithya")))
+
+;; Helper to get the tramp path
+(defmacro tramp-path (server path)
+  `(let* ((host-port (cdr (assoc (quote ,server) remote-hosts)))
+	  (host (car host-port))
+	  (port (cdr host-port)))
+     (concat "/ssh:" host "#" port ":" ,path)))
+
+(defmacro tramp-path-default (server)
+  `(let ((def-path (or (cdr (assoc (quote ,server) remote-hosts-default-path))
+		       (cdr (assoc '_default remote-hosts-default-path)))))
+     (tramp-path ,server def-path)))
+
+;; A macro to set up an alias
+(defmacro eshell-remote-server-setup (sname)
+  `(defalias (quote ,sname)
+       (lambda () (cd (tramp-path-default ,sname)))))
+
+(dolist (elem remote-hosts)
+  (eval `(eshell-remote-server-setup ,(car elem))))
+
+;; =============================================================================
+
+;; functionality
+
+;; Default path for tramp to search for nix executables
+(setq default-shared-nix "/nix/var/nix/profiles/default/bin/")
+
+;; Add the default shared nix path to tramp
+(progn
+  (require 'tramp)
+  (push default-shared-nix tramp-remote-path)
+  (add-to-list 'tramp-remote-path 'tramp-own-remote-path))
 
 ;; =============================================================================
 
@@ -115,16 +133,6 @@
 ;; Don't Go where the mouse follows
 ;; Does not work well with exwm
 (setq mouse-autoselect-window nil)
-
-;; =============================================================================
-
-;; functionality
-
-;; Add the default shared nix path to tramp
-(progn
-  (require 'tramp)
-  (push default-shared-nix tramp-remote-path)
-  (add-to-list 'tramp-remote-path 'tramp-own-remote-path))
 
 ;; =============================================================================
 
@@ -552,21 +560,6 @@ available on github</a>.
 (if enable-exwm-p
     (set-face-attribute 'default nil :family "Fira Code" :height 110)
   (set-face-attribute 'default nil :family "Fira Code" :height 110))
-
-;; =============================================================================
-
-;; functionality
-(defmacro remote-server-setup (sname)
-  `(progn
-     (defun ,sname ()
-       (interactive)
-       (dired (tramp-path (quote ,sname) "/home/adithya")))
-     (defalias (quote ,sname)
-       (lambda () (cd (tramp-path (quote ,sname) "/home/adithya"))))))
-
-(remote-server-setup kaveri)
-
-(remote-server-setup krishna)
 
 ;; =============================================================================
 

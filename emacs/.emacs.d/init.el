@@ -284,6 +284,17 @@
 
 ;; =============================================================================
 
+;; Configure helm-mini
+(leaf helm-mini-config
+  :after helm bufler helm-bufler
+  :require helm-bufler
+  :setq (helm-mini-default-sources
+         . '(helm-bufler-source
+             helm-source-recentf
+             helm-source-buffer-not-found)))
+
+;; =============================================================================
+
 ;; functionality
 
 ;; Use Alt+Arrow to jump to different windows

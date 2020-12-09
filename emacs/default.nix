@@ -87,5 +87,7 @@
       use-package
       leaf
       helm-hoogle
+      bufler
+      helm-bufler
     ];
 }

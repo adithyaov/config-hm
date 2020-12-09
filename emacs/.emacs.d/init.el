@@ -260,6 +260,15 @@
 
 ;; functionality
 
+;; Configure bufler
+(leaf bufler
+  :bind
+  ("C-x C-b" . bufler))
+
+;; =============================================================================
+
+;; functionality
+
 ;; Use Alt+Arrow to jump to different windows
 ;; This does not work well with exwm
 (windmove-default-keybindings 'meta)

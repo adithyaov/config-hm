@@ -17,6 +17,31 @@ let
           });
     };
 
+  haskellPackagesOverlay =
+    let
+      makeHaskellPkgGit =
+        super: gitSrc: ref: name:
+        let src =
+              builtins.fetchGit {
+                url = gitSrc;
+                ref = ref;
+              };
+        in super.callCabal2nix name src {};
+      makeHaskellPkgGitMaster =
+        super: gitSrc: name: makeHaskellPkgGit super gitSrc "master" name;
+    in
+      self: super: {
+        haskellPackages =
+          super.haskellPackages.override {
+            overrides =
+              self: super: {
+                hakyll =
+                  let src = "https://github.com/jaspervdj/hakyll.git";
+                  in makeHaskellPkgGitMaster super src "hakyll";
+              };
+          };
+      };
+
   base = {
     # Let Home Manager install and manage itself.
     programs.home-manager.enable = true;
@@ -44,7 +69,13 @@ let
     programs.direnv.enableNixDirenvIntegration = true;
 
     nixpkgs.config.allowUnfree = true;
-    nixpkgs.overlays = [ emacsOverlay discordOverlay ];
+
+    # Many Haskell packages seem to be marked as broken!
+    # nixpkgs.config.allowBroken = true;
+
+    nixpkgs.overlays = [ emacsOverlay discordOverlay haskellPackagesOverlay ];
+
+
     home.packages = with pkgs; [
       hello
       cacert

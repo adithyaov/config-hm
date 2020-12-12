@@ -30,5 +30,6 @@ in
     haskell-language-server
     ihp
     hasktags
+    hakyll
   ];
 }

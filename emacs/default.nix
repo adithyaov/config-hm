@@ -89,5 +89,6 @@
       helm-hoogle
       bufler
       helm-bufler
+      helm-ag
     ];
 }

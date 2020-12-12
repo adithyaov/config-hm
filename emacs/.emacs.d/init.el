@@ -57,7 +57,13 @@
 	 (user (or (plist-get args :user) (error "No user specified")))
 	 (home (or (plist-get args :home) "/"))
 	 (path (concat "/ssh:" user "@" host "#" port ":" home)))
-    `(defalias (quote ,server) (lambda () (cd ,path)))))
+    `(defun ,server ()
+       (interactive)
+       (let ((buf (eshell 'N)))
+         (with-current-buffer buf
+           (eshell-return-to-prompt)
+           (insert (concat "cd " ,path))
+           (eshell-send-input))))))
 
 ;; =============================================================================
 
@@ -97,13 +103,10 @@
 
 ;; functionality
 
-;; Default path for tramp to search for nix executables
-(setq default-shared-nix "/nix/var/nix/profiles/default/bin/")
-
 ;; Add the default shared nix path to tramp
 (progn
   (require 'tramp)
-  (push default-shared-nix tramp-remote-path)
+  (push "~/.nix-profile/bin/" tramp-remote-path)
   (add-to-list 'tramp-remote-path 'tramp-own-remote-path))
 
 ;; =============================================================================
@@ -446,8 +449,8 @@
 <!-- CSS Reset -->
 <link rel=\"stylesheet\"
 href=\"https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.css\">
-<link
-href=\"https://fonts.googleapis.com/css?family=Fira+Code:300,400\" rel=\"stylesheet\">
+<link href=\"https://fonts.googleapis.com/css2?family=Merriweather:wght@300;900&display=swap\"
+rel=\"stylesheet\">
 <link
 href=\"typesetting.css\" rel=\"stylesheet\">
 ")
@@ -582,12 +585,12 @@ available on github</a>.
 ;; Configure theme
 (leaf doom-themes
   :config
-  (load-theme 'doom-palenight t))
+  (load-theme 'doom-one t))
 
-(leaf faces
-  :custom-face
-  (mode-line-inactive
-   . '((t (:background "#232635" :foreground "#676E95" :box nil)))))
+; (leaf faces
+;   :custom-face
+;   (mode-line-inactive
+;    . '((t (:background "#232635" :foreground "#676E95" :box nil)))))
 
 ;; =============================================================================
 
@@ -598,8 +601,8 @@ available on github</a>.
 (set-frame-font "Fira Code" nil t)
 
 (if enable-exwm-p
-    (set-face-attribute 'default nil :family "Fira Code" :height 110)
-  (set-face-attribute 'default nil :family "Fira Code" :height 110))
+    (set-face-attribute 'default nil :family "Fira Code" :height 120)
+  (set-face-attribute 'default nil :family "Fira Code" :height 120))
 
 ;; =============================================================================
 

@@ -98,6 +98,7 @@ let
       xdotool
       xbindkeys
       lxd
+      silver-searcher
     ];
 
     xresources.properties = {

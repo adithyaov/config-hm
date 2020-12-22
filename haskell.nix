@@ -31,5 +31,6 @@ in
     ihp
     hasktags
     hakyll
+    stack
   ];
 }

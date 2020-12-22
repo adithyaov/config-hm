@@ -59,11 +59,17 @@
 	 (path (concat "/ssh:" user "@" host "#" port ":" home)))
     `(defun ,server ()
        (interactive)
-       (let ((buf (eshell 'N)))
-         (with-current-buffer buf
-           (eshell-return-to-prompt)
-           (insert (concat "cd " ,path))
-           (eshell-send-input))))))
+       (let* ((symb (symbol-name (quote ,server)))
+              (buf-name (concat "eshell" "<" symb ">"))
+              (buf (get-buffer buf-name)))
+         (if buf
+             (switch-to-buffer buf)
+           (let ((buf (eshell 'N)))
+             (with-current-buffer buf
+               (rename-buffer buf-name)
+               (eshell-return-to-prompt)
+               (insert (concat "cd " ,path))
+               (eshell-send-input))))))))
 
 ;; =============================================================================
 
@@ -92,12 +98,42 @@
 
 ;; functionality
 
+;; Emacs hangs on broken pipe. Might as well clean up all connections if
+;; inactive for more than 5 minutes (300 seconds).
+
+(global-set-key (kbd "C-c g") 'tramp-cleanup-all-connections)
+
+(setq kill-idle-tramp
+      (run-with-idle-timer 300 t (lambda () (tramp-cleanup-all-connections))))
+
+(defun cancle-kill-idle-tramp ()
+  (cancel-timer kill-idle-tramp))
+
+;; =============================================================================
+
+;; functionality
+
+;; Discord
+;; firefox
+;; async-shell-command
+
+;; =============================================================================
+
+;; functionality
+
 ;; bury *scratch* buffer instead of kill it
 (defadvice kill-buffer (around kill-buffer-around-advice activate)
   (let ((buffer-to-kill (ad-get-arg 0)))
     (if (equal buffer-to-kill "*scratch*")
         (bury-buffer)
       ad-do-it)))
+
+;; =============================================================================
+
+;; functionality
+
+;; Always save
+;; Some problems need to be fixed to enable this
 
 ;; =============================================================================
 
@@ -208,7 +244,11 @@
 ;; functionality
 
 ;; Conservative scrolling
-(setq scroll-preserve-screen-position 'always)
+(setq redisplay-dont-pause t
+      scroll-margin 7
+      scroll-step 1
+      scroll-conservatively 10
+      scroll-preserve-screen-position 1)
 
 ;; =============================================================================
 
@@ -341,7 +381,7 @@
 (defun nushell ()
   "Start a nu process in ansi-term"
   (interactive)
-  (ansi-term "nu"))
+  (ansi-term "nu" "nu"))
 
 ;; =============================================================================
 
@@ -423,7 +463,7 @@
   ("M-/" . helm-dabbrev)
   ("C-x b" . helm-mini)
   ("C-c h" . helm-command-prefix)
-  ("C-c g" . helm-google-suggest)
+  ;; ("C-c g" . helm-google-suggest)
   :custom
   (helm-split-window-in-side-p . t)
   :config
@@ -602,7 +642,7 @@ available on github</a>.
 
 (if enable-exwm-p
     (set-face-attribute 'default nil :family "Fira Code" :height 120)
-  (set-face-attribute 'default nil :family "Fira Code" :height 120))
+  (set-face-attribute 'default nil :family "Fira Code" :height 110))
 
 ;; =============================================================================
 
@@ -726,10 +766,13 @@ available on github</a>.
   :custom
   (projectile-completion-system . 'helm)
   (projectile-project-search-path . `(,path-prog))
-  (projectile-indexing-method . 'native)
+  (projectile-indexing-method . 'alien)
   (projectile-enable-caching . t)
   :config
   (projectile-mode +1)
+  ;; Ignore some directories
+  (add-to-list 'projectile-globally-ignored-directories  "/dist-newstyle/")
+  (add-to-list 'projectile-globally-ignored-directories  "/dist/")
   :bind
   (:projectile-mode-map
    ("C-c p" . projectile-command-map)))
@@ -1091,7 +1134,7 @@ you ran this command from."
 ;; Configure exwm
 (leaf exwm
   :if enable-exwm-p
-  :require exwm-config
+  :require exwm-config ;; exwm-systemtray
   :init
   (defun rename-workspace-buffer ()
       "Rename buffer according to exwm-class-name"
@@ -1122,6 +1165,7 @@ you ran this command from."
   (exwm-input-set-key (kbd "C-c o") #'exwm-workspace-switch)
   (exwm-input-set-key  (kbd "M-o") #'other-window)
   (push (aref (kbd "<escape>") 0) exwm-input-prefix-keys)
+  ;; (exwm-systemtray-enable)
   (exwm-enable))
 
 ;; =============================================================================

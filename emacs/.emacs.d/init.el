@@ -101,7 +101,7 @@
 ;; Emacs hangs on broken pipe. Might as well clean up all connections if
 ;; inactive for more than 5 minutes (300 seconds).
 
-(global-set-key (kbd "C-c g") 'tramp-cleanup-all-connections)
+(global-set-key (kbd "C-c g") 'tramp-cleanup-all-buffers)
 
 (setq kill-idle-tramp
       (run-with-idle-timer 300 t (lambda () (tramp-cleanup-all-connections))))

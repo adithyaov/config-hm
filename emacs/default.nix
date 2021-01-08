@@ -90,5 +90,6 @@
       bufler
       helm-bufler
       helm-ag
+      helm-org
     ];
 }

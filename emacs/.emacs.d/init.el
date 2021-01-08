@@ -569,36 +569,62 @@ available on github</a>.
 
 ;; org
 
+;; C-c C-c : Add a tag
+;; C-c C-w : Refile
+;; C-c C-t : Set a todo
+
 ;; Configure org
 (leaf org
   :leaf-defer nil
   :pre-setq
-  `(tasks-file . ,(rel-org "tasks.org"))
+  `(inbox . ,(rel-org "inbox.org"))
+  `(gtd . ,(rel-org "gtd.org"))
+  `(someday . ,(rel-org "someday.org"))
+  `(tickler . ,(rel-org "tickler.org"))
   :bind
   ("C-c c" . org-capture)
   (:org-mode-map
    ("<C-return>" . er/expand-region))
   :custom
-  ;; Org mode work flow - Kanban style
-  (org-todo-keywords
-   . '((sequence "TODO" "DOING" "BLOCKED" "REVIEW" "|" "DONE" "ARCHIVED")))
-  ;; Setting Colours (faces) for todo states to give clearer view of work
-  (org-todo-keyword-faces
-   . '(("TODO" . org-warning)
-       ("DOING" . "yellow")
-       ("BLOCKED" . "red")
-       ("REVIEW" . "orange")
-       ("DONE" . "green")
-       ("ARCHIVED" .  "blue")))
+  (org-agenda-files . `(,inbox ,gtd ,tickler))
   (org-capture-templates
-   . '(("t" "Todo" entry
-	(file+headline tasks-file "Tasks")
-	"* TODO %?\n  %i"))))
+   . `(("t" "Todo [inbox]" entry
+        (file+headline ,inbox "Tasks")
+        "* TODO %i%?")
+       ("T" "Tickler" entry
+        (file+headline ,tickler "Tickler")
+        "* %i%? \n %U")))
+  (org-refile-targets
+   . `((,gtd :maxlevel . 3)
+       (,someday :level . 1)
+       (,tickler :maxlevel . 2)))
+  (org-todo-keywords
+   . '((sequence "TODO(t)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)"))))
 
-(defun tasks ()
-  "Open the tasks file."
+(setq helm-org-files-source
+      (helm-build-sync-source "Files"
+	:candidates `(,inbox ,gtd ,someday ,tickler)
+	; :candidate-transformer (lambda (n) (mapcar #'file-name-nondirectory n))
+	:action '(("Open this file" . find-file))
+	:persistent-action 'find-file))
+
+(defun helm-source-org-capture-templates ()
+  "Build source for org capture templates."
+  (helm-build-sync-source "Org Capture Templates:"
+    :candidates (cl-loop for template in org-capture-templates
+                         collect (cons (nth 1 template) (nth 0 template)))
+    :action '(("Do capture" . (lambda (template-shortcut)
+                                (org-capture nil template-shortcut))))))
+
+(defun helm-org-productive ()
   (interactive)
-  (find-file tasks-file))
+  (helm :sources (append
+                  `(,(helm-source-org-capture-templates)
+		    ,helm-org-files-source)
+                  (helm-org-build-sources (org-agenda-files)))
+	:buffer "*productive*"))
+
+(global-set-key (kbd "C-t") 'helm-org-productive)
 
 ;; =============================================================================
 

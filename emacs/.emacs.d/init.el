@@ -43,6 +43,20 @@
   "Get a path relative to .emacs.d editable config"
   (concat (file-name-as-directory path-org) x))
 
+(defun rel-config (x)
+  "Get a path relative to .emacs.d editable config"
+  (concat (file-name-as-directory path-config) x))
+
+(setq path-gtd (rel-org "gtd.org"))
+(setq path-init (rel-config "emacs/.emacs.d/init.el"))
+
+(defun create-if-non-existant (&rest args)
+  (dolist (element args)
+    (unless (file-exists-p element)
+      (write-region "" nil element))))
+
+(create-if-non-existant path-gtd)
+
 ;; =============================================================================
 
 ;; functionality
@@ -327,11 +341,20 @@
 
 ;; =============================================================================
 
+(require 'helm)
+(setq important-files-source
+      (helm-build-sync-source "Files"
+        :candidates `(,path-gtd ,path-init)
+        ;; :candidate-transformer (lambda (n) (mapcar #'file-name-nondirectory n))
+        :action '(("Open this file" . find-file-other-window))
+        :persistent-action 'find-file))
+
 ;; Configure helm-mini
 (leaf helm-mini-config
   :after helm
   :setq (helm-mini-default-sources
-         . '(helm-source-buffers-list
+         . '(important-files-source
+             helm-source-buffers-list
              helm-source-recentf
              helm-source-buffer-not-found)))
 
@@ -576,55 +599,26 @@ available on github</a>.
 ;; Configure org
 (leaf org
   :leaf-defer nil
-  :pre-setq
-  `(inbox . ,(rel-org "inbox.org"))
-  `(gtd . ,(rel-org "gtd.org"))
-  `(someday . ,(rel-org "someday.org"))
-  `(tickler . ,(rel-org "tickler.org"))
   :bind
-  ("C-c c" . org-capture)
   (:org-mode-map
-   ("<C-return>" . er/expand-region))
+   ("<C-return>" . er/expand-region)
+   ("<M-return>" . org-insert-todo-heading))
   :custom
-  (org-agenda-files . `(,inbox ,gtd ,tickler))
-  (org-capture-templates
-   . `(("t" "Todo [inbox]" entry
-        (file+headline ,inbox "Tasks")
-        "* TODO %i%?")
-       ("T" "Tickler" entry
-        (file+headline ,tickler "Tickler")
-        "* %i%? \n %U")))
-  (org-refile-targets
-   . `((,gtd :maxlevel . 3)
-       (,someday :level . 1)
-       (,tickler :maxlevel . 2)))
+  ;; Org mode work flow - Kanban style
   (org-todo-keywords
-   . '((sequence "TODO(t)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)"))))
-
-(setq helm-org-files-source
-      (helm-build-sync-source "Files"
-	:candidates `(,inbox ,gtd ,someday ,tickler)
-	; :candidate-transformer (lambda (n) (mapcar #'file-name-nondirectory n))
-	:action '(("Open this file" . find-file))
-	:persistent-action 'find-file))
-
-(defun helm-source-org-capture-templates ()
-  "Build source for org capture templates."
-  (helm-build-sync-source "Org Capture Templates:"
-    :candidates (cl-loop for template in org-capture-templates
-                         collect (cons (nth 1 template) (nth 0 template)))
-    :action '(("Do capture" . (lambda (template-shortcut)
-                                (org-capture nil template-shortcut))))))
-
-(defun helm-org-productive ()
-  (interactive)
-  (helm :sources (append
-                  `(,(helm-source-org-capture-templates)
-		    ,helm-org-files-source)
-                  (helm-org-build-sources (org-agenda-files)))
-	:buffer "*productive*"))
-
-(global-set-key (kbd "C-t") 'helm-org-productive)
+   . '((sequence "TODO" "DOING" "BLOCKED" "REVIEW" "|" "DONE" "ARCHIVED")))
+  ;; Setting Colours (faces) for todo states to give clearer view of work
+  (org-todo-keyword-faces
+   . '(("TODO" . org-warning)
+       ("DOING" . "yellow")
+       ("BLOCKED" . "red")
+       ("REVIEW" . "orange")
+       ("DONE" . "green")
+       ("ARCHIVED" .  "blue")))
+  :config
+  (defun org-archive-done-tasks ()
+    (interactive)
+    (org-map-entries 'org-archive-subtree "/DONE" 'file)))
 
 ;; =============================================================================
 
@@ -842,8 +836,32 @@ available on github</a>.
 
 ;; editing
 
+;; Configure major-mode-hydra
+
+(leaf major-mode-hydra
+  :after hydra
+  :bind
+  ("C-c j" . major-mode-hydra)
+  :config
+  (major-mode-hydra-define org-mode nil
+    ("Context"
+     (("h" org-metaleft "M-Left" :exit nil)
+      ("j" org-metadown "M-Down" :exit nil)
+      ("k" org-metaup "M-Up" :exit nil)
+      ("l" org-metaright "M-Right" :exit nil)
+      ("H" org-shiftleft "S-Left" :exit nil)
+      ("J" org-shiftdown "S-Down" :exit nil)
+      ("K" org-shiftup "S-Up" :exit nil)
+      ("L" org-shiftright "S-Right" :exit nil)
+      ("q" nil)))))
+
+;; =============================================================================
+
+;; editing
+
 ;; Configure hydra
 (leaf hydra
+  :leaf-defer nil
   :config
   (global-set-key
    (kbd "C-c m")
@@ -1137,7 +1155,7 @@ Version 2018-04-02T14:38:04-07:00"
 ;; Configure ghcid
 (leaf ghcid
   :after projectile
-  :require s ghcid
+  :require s
   :config
   (defun set-default-target ()
     "Set a default ghcid-target"

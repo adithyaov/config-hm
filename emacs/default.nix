@@ -91,5 +91,6 @@
       helm-bufler
       helm-ag
       helm-org
+      major-mode-hydra
     ];
 }

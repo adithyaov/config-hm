@@ -26,10 +26,11 @@
 ;; boot
 
 ;; Configure paths
-(setq path-init "~/.emacs.d/")
-(setq path-prog "~/Desktop/Prog/")
-(setq path-config "~/config/")
-(setq path-org "~/org/")
+
+(setq path-init (expand-file-name "~/.emacs.d/"))
+(setq path-prog (expand-file-name "~/Desktop/Prog/"))
+(setq path-config (expand-file-name "~/config/"))
+(setq path-org (expand-file-name "~/org/"))
 
 (defun rel-init (x)
   "Get a path relative to .emacs.d editable config"
@@ -48,7 +49,7 @@
   (concat (file-name-as-directory path-config) x))
 
 (setq path-gtd (rel-org "gtd.org"))
-(setq path-init (rel-config "emacs/.emacs.d/init.el"))
+(setq config/path-init (rel-config "emacs/.emacs.d/init.el"))
 
 (defun create-if-non-existant (&rest args)
   (dolist (element args)
@@ -344,7 +345,7 @@
 (require 'helm)
 (setq important-files-source
       (helm-build-sync-source "Files"
-        :candidates `(,path-gtd ,path-init)
+        :candidates `(,path-gtd ,config/path-init)
         ;; :candidate-transformer (lambda (n) (mapcar #'file-name-nondirectory n))
         :action '(("Open this file" . find-file-other-window))
         :persistent-action 'find-file))
@@ -845,14 +846,14 @@ available on github</a>.
   :config
   (major-mode-hydra-define org-mode nil
     ("Context"
-     (("h" org-metaleft "M-Left" :exit nil)
-      ("j" org-metadown "M-Down" :exit nil)
-      ("k" org-metaup "M-Up" :exit nil)
-      ("l" org-metaright "M-Right" :exit nil)
-      ("H" org-shiftleft "S-Left" :exit nil)
-      ("J" org-shiftdown "S-Down" :exit nil)
-      ("K" org-shiftup "S-Up" :exit nil)
-      ("L" org-shiftright "S-Right" :exit nil)
+     (("b" org-metaleft "M-Left" :exit nil)
+      ("n" org-metadown "M-Down" :exit nil)
+      ("p" org-metaup "M-Up" :exit nil)
+      ("f" org-metaright "M-Right" :exit nil)
+      ("B" org-shiftleft "S-Left" :exit nil)
+      ("N" org-shiftdown "S-Down" :exit nil)
+      ("P" org-shiftup "S-Up" :exit nil)
+      ("F" org-shiftright "S-Right" :exit nil)
       ("q" nil)))))
 
 ;; =============================================================================
@@ -1155,7 +1156,7 @@ Version 2018-04-02T14:38:04-07:00"
 ;; Configure ghcid
 (leaf ghcid
   :after projectile
-  :require s
+  :require s ghcid
   :config
   (defun set-default-target ()
     "Set a default ghcid-target"

@@ -88,6 +88,38 @@
 
 ;; =============================================================================
 
+;; boot
+
+;; Multi monitor
+
+;; Assumes :2 as the second display
+
+;; (defun setup-second-display ()
+;;   (interactive)
+;;   (make-frame-on-display ":2"))
+
+;; =============================================================================
+
+;; boot
+
+;; Window management
+
+;; Unset delete-other-windows key
+(global-unset-key (kbd "C-x 1"))
+
+(defun justify-windows-long-screen ()
+  (interactive)
+  (progn
+    (delete-other-windows)
+    (split-window-right)
+    (split-window-right)
+    (split-window-right)
+    (balance-windows)))
+(justify-windows-long-screen)
+(global-set-key (kbd "C-x 1") 'justify-windows-long-screen)
+
+;; =============================================================================
+
 ;; functionality
 
 ;; Setup kaveri
@@ -315,8 +347,17 @@
 
 ;; functionality
 
+(defun prev-window ()
+  (interactive)
+  (other-window -1))
+
+;; =============================================================================
+
+;; functionality
+
 ;; Key bindings
 (global-set-key (kbd "M-o") 'other-window)
+(global-set-key (kbd "C-o") 'prev-window)
 (define-key isearch-mode-map "\C-n" 'isearch-repeat-forward)
 (define-key isearch-mode-map "\C-p" 'isearch-repeat-backward)
 (global-set-key (kbd "M-n") 'forward-paragraph)
@@ -347,7 +388,7 @@
       (helm-build-sync-source "Files"
         :candidates `(,path-gtd ,config/path-init)
         ;; :candidate-transformer (lambda (n) (mapcar #'file-name-nondirectory n))
-        :action '(("Open this file" . find-file-other-window))
+        :action '(("Open this file" . find-file))
         :persistent-action 'find-file))
 
 ;; Configure helm-mini
@@ -648,10 +689,10 @@ available on github</a>.
   :config
   (load-theme 'doom-one t))
 
-; (leaf faces
-;   :custom-face
-;   (mode-line-inactive
-;    . '((t (:background "#232635" :foreground "#676E95" :box nil)))))
+;; (leaf faces
+;;   :custom-face
+;;   (mode-line-inactive
+;;    . '((t (:background "#232635" :foreground "#676E95" :box nil)))))
 
 ;; =============================================================================
 
@@ -1209,6 +1250,7 @@ you ran this command from."
   :config
   (exwm-input-set-key (kbd "C-c o") #'exwm-workspace-switch)
   (exwm-input-set-key  (kbd "M-o") #'other-window)
+  (exwm-input-set-key (kbd "C-o") #'prev-window)
   (push (aref (kbd "<escape>") 0) exwm-input-prefix-keys)
   ;; (exwm-systemtray-enable)
   (exwm-enable))

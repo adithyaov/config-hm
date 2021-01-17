@@ -362,7 +362,7 @@
 
 ;; Key bindings
 (global-set-key (kbd "M-o") 'other-window)
-(global-set-key (kbd "C-o") 'prev-window)
+(global-set-key (kbd "M-O") 'prev-window)
 (define-key isearch-mode-map "\C-n" 'isearch-repeat-forward)
 (define-key isearch-mode-map "\C-p" 'isearch-repeat-backward)
 (global-set-key (kbd "M-n") 'forward-paragraph)
@@ -1255,7 +1255,7 @@ you ran this command from."
   :config
   (exwm-input-set-key (kbd "C-c o") #'exwm-workspace-switch)
   (exwm-input-set-key  (kbd "M-o") #'other-window)
-  (exwm-input-set-key (kbd "C-o") #'prev-window)
+  (exwm-input-set-key (kbd "M-O") #'prev-window)
   (push (aref (kbd "<escape>") 0) exwm-input-prefix-keys)
   ;; (exwm-systemtray-enable)
   (exwm-enable))

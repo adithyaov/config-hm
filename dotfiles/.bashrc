@@ -24,9 +24,9 @@ xmodmap -e "keycode 66 = Escape NoSymbol Escape"
 if [ -e "$HOME/.nix-profile/etc/profile.d/nix.sh" ]; then source "$HOME/.nix-profile/etc/profile.d/nix.sh"; fi
 '
 
-alias xmacs='
-Xephyr :1 -ac -fullscreen -dpi 96 &
-export DISPLAY=:1
-sleep 2
-emacs
-'
+# $1 = Display
+xmacs () {
+    eval "Xephyr :$1 -ac -fullscreen -dpi 96 &"
+    sleep 2
+    eval "DISPLAY=:$1 emacs"
+}

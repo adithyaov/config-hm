@@ -91,8 +91,13 @@
 ;; boot
 
 ;; Multi monitor
-
 ;; Assumes :2 as the second display
+;; This does not work due file locking
+;; The best way to do this is using
+;; - emacs --daemon
+;; - emacsclient
+;; - next-multiframe-window
+;; - prev-multiframe-window
 
 ;; (defun setup-second-display ()
 ;;   (interactive)

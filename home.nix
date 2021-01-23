@@ -99,6 +99,7 @@ let
       xbindkeys
       lxd
       silver-searcher
+      neuron-notes
     ];
 
     xresources.properties = {

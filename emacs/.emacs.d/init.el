@@ -608,6 +608,7 @@ available on github</a>.
 
 ;; Configure doom-modeline
 (leaf doom-modeline
+  :if nil
   :config
   (doom-modeline-init)
   (doom-modeline-mode 1))
@@ -666,6 +667,18 @@ available on github</a>.
   (defun org-archive-done-tasks ()
     (interactive)
     (org-map-entries 'org-archive-subtree "/DONE" 'file)))
+
+;; =============================================================================
+
+;; development
+
+;; Configure markdown
+(leaf markdown-mode
+  :leaf-defer nil
+  :bind
+  (:markdown-mode-map
+   ("M-n" . forward-paragraph)
+   ("M-p" . backward-paragraph)))
 
 ;; =============================================================================
 

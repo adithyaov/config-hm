@@ -92,5 +92,9 @@
       helm-ag
       helm-org
       major-mode-hydra
+      neuron-mode
+      ox-hugo
+      deft
+      zetteldeft
     ];
 }

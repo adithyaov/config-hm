@@ -96,5 +96,12 @@
       ox-hugo
       deft
       zetteldeft
+      github-review
+      kaolin-themes
+      atom-one-dark-theme
+      vscode-dark-plus-theme
+      monokai-theme
+      vue-mode
+      spacemacs-theme
     ];
 }

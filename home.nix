@@ -100,6 +100,14 @@ let
       lxd
       silver-searcher
       neuron-notes
+      hugo
+      plantuml
+      google-chrome
+      podman
+      qbittorrent
+      megasync
+      zlib
+      autokey
     ];
 
     xresources.properties = {
@@ -140,6 +148,12 @@ let
     programs.git.enable = true;
     programs.git.userName = "adithyaov";
     programs.git.userEmail = "adi.obilisetty@gmail.com";
+    programs.git.extraConfig = {
+      github = {
+        user = "adithyaov";
+        email = "adithya@composewell.com";
+      };
+    };
   };
   dotfiles = import ./dotfiles;
   emacs = import ./emacs { inherit pkgs; };

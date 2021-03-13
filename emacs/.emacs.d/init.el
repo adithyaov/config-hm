@@ -58,6 +58,38 @@
 
 (create-if-non-existant path-gtd)
 
+
+;; =============================================================================
+
+;; boot
+
+;; Open directory on RET
+
+(leaf dired
+  :bind
+  (:dired-mode-map
+   ("RET" . dired-maybe-insert-subdir)
+   ("C-k" . dired-kill-subdir)))
+
+;; =============================================================================
+
+;; boot
+
+;; plantuml setup
+
+(setq path-plantuml-jar (rel-init "plantuml.jar"))
+
+(unless (file-exists-p path-plantuml-jar)
+  (write-region "" nil element))
+
+;; =============================================================================
+
+;; boot
+
+;; Don't create lock files
+
+(setq create-lockfiles nil)
+
 ;; =============================================================================
 
 ;; functionality
@@ -109,19 +141,21 @@
 
 ;; Window management
 
-;; Unset delete-other-windows key
-(global-unset-key (kbd "C-x 1"))
-
-(defun justify-windows-long-screen ()
-  (interactive)
+(when (yes-or-no-p "Justify wide screens? ")
   (progn
-    (delete-other-windows)
-    (split-window-right)
-    (split-window-right)
-    (split-window-right)
-    (balance-windows)))
-(justify-windows-long-screen)
-(global-set-key (kbd "C-x 1") 'justify-windows-long-screen)
+   ;; Unset delete-other-windows key
+   (global-unset-key (kbd "C-x 1"))
+
+   (defun justify-windows-long-screen ()
+     (interactive)
+     (progn
+       (delete-other-windows)
+       (split-window-right)
+       (split-window-right)
+       (split-window-right)
+       (balance-windows)))
+   (justify-windows-long-screen)
+   (global-set-key (kbd "C-x 1") 'justify-windows-long-screen)))
 
 ;; =============================================================================
 
@@ -246,6 +280,13 @@
 
 ;; boot
 
+(setq auto-save-file-name-transforms
+    `((".*" ,temporary-file-directory t)))
+
+;; =============================================================================
+
+;; boot
+
 ;; Dont use a custom file
 ;; Customize stuff by yourself
 (setq-default custom-file nil)
@@ -330,6 +371,7 @@
 
 ;; Set column length to 80
 (setq-default fill-column 80)
+(add-hook 'prog-mode-hook 'display-fill-column-indicator-mode)
 
 ;; =============================================================================
 
@@ -511,7 +553,12 @@
 ;; development
 
 ;; Configure elm-mode
-(leaf elm-mode)
+(leaf elm-mode
+  :bind
+  (:elm-mode-map
+   ("M-q" . elm-format))
+  :hook
+   (elm-mode-hook . elm-format-on-save-mode))
 
 ;; =============================================================================
 
@@ -608,7 +655,6 @@ available on github</a>.
 
 ;; Configure doom-modeline
 (leaf doom-modeline
-  :if nil
   :config
   (doom-modeline-init)
   (doom-modeline-mode 1))
@@ -626,6 +672,7 @@ available on github</a>.
 
 ;; Fira code font
 (leaf fira-code-mode
+  :custom (fira-code-mode-disabled-ligatures '("[]" "#{" "#(" "#_" "#_(" "x"))
   :config
   (global-fira-code-mode))
 
@@ -703,14 +750,16 @@ available on github</a>.
 ;; theme
 
 ;; Configure theme
-(leaf doom-themes
+(leaf spacemacs-theme
   :config
-  (load-theme 'doom-one t))
+  (load-theme 'spacemacs-dark t))
 
 ;; (leaf faces
 ;;   :custom-face
 ;;   (mode-line-inactive
-;;    . '((t (:background "#232635" :foreground "#676E95" :box nil)))))
+;;    . '((t (:background "#303030"))))
+;;   (mode-line
+;;    . '((t (:background "#005aa3")))))
 
 ;; =============================================================================
 

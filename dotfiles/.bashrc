@@ -30,3 +30,7 @@ xmacs () {
     sleep 2
     eval "DISPLAY=:$1 emacs"
 }
+
+
+YARN_BIN="~/.yarn/bin"
+export PATH="$YARN_BIN:$PATH"

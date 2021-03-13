@@ -4,5 +4,6 @@
     elm2nix
     elm
     elm-format
+    create-elm-app
   ];
 }

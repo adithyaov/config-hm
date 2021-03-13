@@ -5,5 +5,6 @@
     npm
     vue-cli
     parcel-bundler
+    yarn
   ];
 }
